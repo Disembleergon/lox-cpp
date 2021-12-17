@@ -1,0 +1,7 @@
+/.vs/
+/x64/
+/lox-cpp/x64/
+/lox-cpp/*.vcxproj
+/lox-cpp/*.filters
+/lox-cpp/*.user
+*.sln
