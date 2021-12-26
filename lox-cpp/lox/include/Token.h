@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TOKEN_H
+#define TOKEN_H
+
 #include <string>
 #include <variant>
 
@@ -69,3 +71,5 @@ class Token
 };
 
 } // namespace lox
+
+#endif

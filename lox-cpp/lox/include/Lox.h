@@ -1,4 +1,6 @@
-#pragma once
+#ifndef LOX_H
+#define LOX_H
+
 #include <iostream>
 
 namespace lox
@@ -16,3 +18,5 @@ class Lox
 };
 
 } // namespace lox
+
+#endif
