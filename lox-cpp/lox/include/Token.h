@@ -59,14 +59,13 @@ static enum class TokenType
 
 class Token
 {
-  private:
-    // Literals can be strings or numbers (represented as double)
-    using LiteralType = std::variant<std::string, double>;
-
   public:
+    // Literals can be strings or numbers (represented as double)
+    using literal_t = std::variant<std::string, double>;
+
     const lox::TokenType type;
     const std::string lexeme;
-    const LiteralType literal;
+    const literal_t literal;
     const int line;
 };
 
