@@ -2,6 +2,9 @@
 #include <fstream>
 #include <string>
 
+// init hadError variable
+bool lox::Lox::hadError = false;
+
 // run .lox file
 void lox::Lox::runFile(const char *filename)
 {
@@ -27,7 +30,7 @@ void lox::Lox::runFile(const char *filename)
     run(sourceCode);
 
     // indicate error with exit code
-    if (m_hadError)
+    if (hadError)
         std::exit(EXIT_FAILURE);
 }
 
@@ -38,23 +41,10 @@ void lox::Lox::runPrompt()
     while (std::cout << "> " && std::getline(std::cin, enteredSource))
     {
         run(enteredSource);
-        m_hadError = false;
+        hadError = false;
     }
 }
 
 void lox::Lox::run(std::string &sourceCode)
 {
-}
-
-// ---- error handling ----
-
-void lox::Lox::error(int line, const char *message)
-{
-    report(line, "", message);
-}
-
-void lox::Lox::report(int line, const char *where, const char *message)
-{
-    std::cerr << "[line " << line << "] Error" << where << ": " << message << "\n";
-    m_hadError = true;
 }

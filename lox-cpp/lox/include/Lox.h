@@ -11,13 +11,8 @@ class Lox
     void runPrompt();
     void run(std::string &sourceCode);
 
-  private:
-    // error handling
-    void error(int line, const char *message);
-    void report(int line, const char *where, const char *message);
-
     // indicates, if any errors were found
-    bool m_hadError = false;
+    static bool hadError;
 };
 
 } // namespace lox
