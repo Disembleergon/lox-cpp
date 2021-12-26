@@ -71,6 +71,28 @@ void Scanner::scanToken()
     case '<':
         addToken(match('=') ? LESS_EQUAL : LESS);
         break;
+    case '/':
+        if (match('/'))
+        {
+            // skip comment
+            while (peek() != '\0' && !isAtEnd())
+                advance();
+        }
+        else
+            addToken(SLASH);
+
+        break;
+
+    // ignore whitespace
+    case ' ':
+    case '\r':
+    case '\t':
+        break;
+
+    // next line
+    case '\n':
+        ++m_line;
+        break;
 
     // literal not found
     default:
@@ -101,4 +123,11 @@ bool Scanner::isAtEnd() const
 char Scanner::advance()
 {
     return m_source.at(m_current++);
+}
+
+char Scanner::peek()
+{
+    if (isAtEnd())
+        return '\0';
+    return m_source.at(m_current);
 }

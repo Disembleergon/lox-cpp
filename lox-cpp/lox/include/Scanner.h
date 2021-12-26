@@ -27,9 +27,12 @@ class Scanner
     // private methods
     void scanToken();
     void addToken(const lox::TokenType &type, const lox::Token::literal_t &literal = {});
+
+    // private helper methods
     bool match(char expected);
     bool isAtEnd() const;
     char advance();
+    char peek();
 };
 
 #endif
