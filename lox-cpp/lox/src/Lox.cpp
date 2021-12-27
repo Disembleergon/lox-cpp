@@ -1,4 +1,6 @@
 #include "../include/Lox.h"
+#include "../include/Scanner.h"
+
 #include <fstream>
 #include <string>
 
@@ -45,6 +47,13 @@ void lox::Lox::runPrompt()
     }
 }
 
-void lox::Lox::run(std::string &sourceCode)
+void lox::Lox::run(const std::string &sourceCode)
 {
+    Scanner scanner{sourceCode};
+    Scanner::tokenlist_t tokens = scanner.scanTokens();
+
+    for (const auto &token : tokens)
+    {
+        // std::cout << token << "\n";
+    }
 }

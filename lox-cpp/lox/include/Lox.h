@@ -11,7 +11,7 @@ class Lox
   public:
     void runFile(const char *filename);
     void runPrompt();
-    void run(std::string &sourceCode);
+    void run(const std::string &sourceCode);
 
     // indicates, if any errors were found
     static bool hadError;

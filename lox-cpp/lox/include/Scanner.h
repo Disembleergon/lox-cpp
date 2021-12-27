@@ -12,11 +12,10 @@ namespace lox
 
 class Scanner
 {
-    using tokenlist_t = std::vector<lox::Token>;
-
   public:
     Scanner(const std::string &source) : m_source(source){};
 
+    using tokenlist_t = std::vector<lox::Token>;
     tokenlist_t scanTokens();
 
   private:
