@@ -7,6 +7,9 @@
 
 #include "Token.h"
 
+namespace lox
+{
+
 class Scanner
 {
     using tokenlist_t = std::vector<lox::Token>;
@@ -26,7 +29,7 @@ class Scanner
 
     // private methods
     void scanToken();
-    void addToken(const lox::TokenType &type, const lox::Token::literal_t &literal = {});
+    void addToken(const TokenType &type, const Token::literal_t &literal = {});
 
     // private helper methods
     bool match(char expected);
@@ -34,5 +37,6 @@ class Scanner
     char advance();
     char peek();
 };
+} // namespace lox
 
 #endif

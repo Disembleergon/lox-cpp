@@ -4,10 +4,8 @@
 
 #include "../include/ErrorHandler.h"
 
-Scanner::tokenlist_t Scanner::scanTokens()
+lox::Scanner::tokenlist_t lox::Scanner::scanTokens()
 {
-    using namespace lox;
-
     while (!isAtEnd())
     {
         // start of new lexime
@@ -21,9 +19,9 @@ Scanner::tokenlist_t Scanner::scanTokens()
 }
 
 // scan next char and identify it
-void Scanner::scanToken()
+void lox::Scanner::scanToken()
 {
-    using enum lox::TokenType;
+    using enum TokenType;
     char c = advance(); // next char
 
     switch (c)
@@ -100,13 +98,13 @@ void Scanner::scanToken()
     }
 }
 
-void Scanner::addToken(const lox::TokenType &type, const lox::Token::literal_t &literal)
+void lox::Scanner::addToken(const TokenType &type, const Token::literal_t &literal)
 {
     std::string text = m_source.substr(m_start, m_current);
     const lox::Token newToken{type, text, literal, m_line};
 }
 
-bool Scanner::match(char expected)
+bool lox::Scanner::match(char expected)
 {
     if (isAtEnd() || m_source.at(m_current) != expected)
         return false;
@@ -115,17 +113,17 @@ bool Scanner::match(char expected)
     return true;
 }
 
-bool Scanner::isAtEnd() const
+bool lox::Scanner::isAtEnd() const
 {
     return m_current >= m_source.length();
 }
 
-char Scanner::advance()
+char lox::Scanner::advance()
 {
     return m_source.at(m_current++);
 }
 
-char Scanner::peek()
+char lox::Scanner::peek()
 {
     if (isAtEnd())
         return '\0';
