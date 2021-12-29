@@ -18,7 +18,7 @@ void lox::Lox::runFile(const char *filename)
     {
         std::string line;
         while (std::getline(fileStream, line))
-            sourceCode += line;
+          sourceCode += (line + '\n');
 
         fileStream.close();
     }

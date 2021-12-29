@@ -6,7 +6,7 @@
 
 namespace lox
 {
-static enum class TokenType
+const static enum class TokenType
 {
     // Single-character tokens.
     LEFT_PAREN,
@@ -73,7 +73,7 @@ class Token
     {
         const int token_type = static_cast<int>(t.type);
 
-        stream << token_type << " " << t.lexeme; //<< " " << std::get(t.literal);
+        stream << "type: " << token_type << " lexeme: " << t.lexeme; //<< " " << std::get(t.literal);
         return stream;
     }
 };

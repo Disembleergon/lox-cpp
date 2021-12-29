@@ -1,7 +1,4 @@
 #include "../include/Scanner.h"
-
-#include <stdexcept>
-
 #include "../include/ErrorHandler.h"
 
 lox::Scanner::tokenlist_t lox::Scanner::scanTokens()
@@ -14,7 +11,7 @@ lox::Scanner::tokenlist_t lox::Scanner::scanTokens()
     }
 
     // end of line
-    m_tokens.push_back(Token{TokenType::Eof, "", {}, m_line});
+    m_tokens.emplace_back(Token{TokenType::Eof, "", {}, m_line});
     return m_tokens;
 }
 
@@ -73,7 +70,7 @@ void lox::Scanner::scanToken()
         if (match('/'))
         {
             // skip comment
-            while (peek() != '\0' && !isAtEnd())
+            while (peek() != '\n' && !isAtEnd())
                 advance();
         }
         else
@@ -100,8 +97,10 @@ void lox::Scanner::scanToken()
 
 void lox::Scanner::addToken(const TokenType &type, const Token::literal_t &literal)
 {
-    std::string text = m_source.substr(m_start, m_current);
+    std::string text = m_source.substr(m_start, m_current - m_start);
     const lox::Token newToken{type, text, literal, m_line};
+
+    m_tokens.emplace_back(newToken);
 }
 
 bool lox::Scanner::match(char expected)
