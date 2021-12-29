@@ -54,6 +54,6 @@ void lox::Lox::run(const std::string &sourceCode)
 
     for (const auto &token : tokens)
     {
-        // std::cout << token << "\n";
+        std::cout << token << "\n";
     }
 }

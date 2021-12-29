@@ -1,7 +1,7 @@
 #ifndef TOKEN_H
 #define TOKEN_H
 
-#include <string>
+#include <iostream>
 #include <variant>
 
 namespace lox
@@ -67,6 +67,15 @@ class Token
     const std::string lexeme;
     const literal_t literal;
     const int line;
+
+    // make Token std::ostream compatible
+    friend std::ostream &operator<<(std::ostream &stream, const Token &t)
+    {
+        const int token_type = static_cast<int>(t.type);
+
+        stream << token_type << " " << t.lexeme; //<< " " << std::get(t.literal);
+        return stream;
+    }
 };
 
 } // namespace lox
