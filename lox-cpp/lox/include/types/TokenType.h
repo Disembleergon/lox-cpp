@@ -61,7 +61,7 @@ const static std::unordered_map<TokenType, const char *> TokenType_Strings = {
     {TokenType::LEFT_PAREN, "LEFT_PAREN"},
     {TokenType::RIGHT_PAREN, "RIGHT_PAREN"},
     {TokenType::LEFT_BRACE, "LEFT_BRACE"},
-    {TokenType::RIGHT_BRACE, "LEFT_BRACE"},
+    {TokenType::RIGHT_BRACE, "RIGHT_BRACE"},
     {TokenType::COMMA, "COMMA"},
     {TokenType::DOT, "DOT"},
     {TokenType::MINUS, "MINUS"},
