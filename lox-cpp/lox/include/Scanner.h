@@ -29,6 +29,7 @@ class Scanner
     // private methods
     void scanToken();
     void addToken(const TokenType &type, const Token::literal_t &literal = {});
+    void string();
 
     // private helper methods
     bool match(char expected);

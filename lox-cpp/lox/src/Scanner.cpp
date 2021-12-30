@@ -89,6 +89,11 @@ void lox::Scanner::scanToken()
         ++m_line;
         break;
 
+    // string literal
+    case '"':
+        string();
+        break;
+
     // literal not found
     default:
         ErrorHandler::error(m_line, "Unexcpected character");
@@ -101,6 +106,29 @@ void lox::Scanner::addToken(const TokenType &type, const Token::literal_t &liter
     const lox::Token newToken{type, text, literal, m_line};
 
     m_tokens.emplace_back(newToken);
+}
+
+void lox::Scanner::string()
+{
+    while (peek() != '"' && !isAtEnd())
+    {
+        if (peek() == '\n')
+            ++m_line;
+        advance();
+    }
+
+    if (isAtEnd())
+    {
+        ErrorHandler::error(m_line, "Unterminated string.");
+        return;
+    }
+
+    // The closing "
+    advance();
+
+    // trim surrounding quotes
+    const auto value = m_source.substr(m_start + 1, m_current - m_start - 2);
+    addToken(TokenType::STRING, value);
 }
 
 bool lox::Scanner::match(char expected)
