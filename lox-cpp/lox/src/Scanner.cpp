@@ -96,7 +96,10 @@ void lox::Scanner::scanToken()
 
     // literal not found
     default:
-        ErrorHandler::error(m_line, "Unexcpected character");
+        if (std::isdigit(c))
+            number();
+        else
+            ErrorHandler::error(m_line, "Unexcpected character");
     }
 }
 
@@ -131,6 +134,25 @@ void lox::Scanner::string()
     addToken(TokenType::STRING, value);
 }
 
+void lox::Scanner::number()
+{
+    while (std::isdigit(peek()))
+        advance();
+
+    // optional fractional part
+    if (peek() == '.' && std::isdigit(peekNext()))
+    {
+        // consume the "."
+        advance();
+
+        while (std::isdigit(peek()))
+            advance();
+    }
+
+    const auto str_value = m_source.substr(m_start, m_current - m_start);
+    addToken(TokenType::NUMBER, std::stod(str_value));
+}
+
 bool lox::Scanner::match(char expected)
 {
     if (isAtEnd() || m_source.at(m_current) != expected)
@@ -155,4 +177,12 @@ char lox::Scanner::peek()
     if (isAtEnd())
         return '\0';
     return m_source.at(m_current);
+}
+
+char lox::Scanner::peekNext()
+{
+    if (m_current + 1 >= m_source.length())
+        return '\0';
+
+    return m_source.at(m_current + 1);
 }

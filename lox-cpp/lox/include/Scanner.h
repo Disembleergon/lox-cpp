@@ -30,12 +30,14 @@ class Scanner
     void scanToken();
     void addToken(const TokenType &type, const Token::literal_t &literal = {});
     void string();
+    void number();
 
     // private helper methods
     bool match(char expected);
     bool isAtEnd() const;
     char advance();
     char peek();
+    char peekNext();
 };
 } // namespace lox
 
