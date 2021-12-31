@@ -33,6 +33,7 @@ class Scanner
     void number();
     void identifier();
     void comment();
+    void multiline_comment();
 
     // private helper methods
     bool match(char expected);

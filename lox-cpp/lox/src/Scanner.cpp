@@ -67,7 +67,12 @@ void lox::Scanner::scanToken()
         addToken(match('=') ? LESS_EQUAL : LESS);
         break;
     case '/':
-        comment();
+        if (match('/'))
+            comment();
+        else if (match('*'))
+            multiline_comment();
+        else
+            addToken(SLASH);
         break;
 
     // ignore whitespace
@@ -169,14 +174,29 @@ void lox::Scanner::identifier()
 
 void lox::Scanner::comment()
 {
-    if (match('/'))
+    // skip comment
+    while (peek() != '\n' && !isAtEnd())
+        advance();
+}
+
+void lox::Scanner::multiline_comment()
+{
+    while (peek() != '*' || peekNext() != '/')
     {
-        // skip comment
-        while (peek() != '\n' && !isAtEnd())
-            advance();
+        if (isAtEnd())
+        {
+            ErrorHandler::error(m_line, "block-comment not closed.");
+            return;
+        }
+
+        if (peek() == '\n')
+            ++m_line;
+        advance();
     }
-    else
-        addToken(TokenType::SLASH);
+
+    // skip '*/'
+    advance();
+    advance();
 }
 
 // check if next char == expected & advance
