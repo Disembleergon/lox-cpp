@@ -32,6 +32,7 @@ class Scanner
     void string();
     void number();
     void identifier();
+    void comment();
 
     // private helper methods
     bool match(char expected);

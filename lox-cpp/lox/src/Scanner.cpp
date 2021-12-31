@@ -67,15 +67,7 @@ void lox::Scanner::scanToken()
         addToken(match('=') ? LESS_EQUAL : LESS);
         break;
     case '/':
-        if (match('/'))
-        {
-            // skip comment
-            while (peek() != '\n' && !isAtEnd())
-                advance();
-        }
-        else
-            addToken(SLASH);
-
+        comment();
         break;
 
     // ignore whitespace
@@ -175,6 +167,19 @@ void lox::Scanner::identifier()
     addToken(type);
 }
 
+void lox::Scanner::comment()
+{
+    if (match('/'))
+    {
+        // skip comment
+        while (peek() != '\n' && !isAtEnd())
+            advance();
+    }
+    else
+        addToken(TokenType::SLASH);
+}
+
+// check if next char == expected & advance
 bool lox::Scanner::match(char expected)
 {
     if (isAtEnd() || m_source.at(m_current) != expected)
@@ -194,6 +199,7 @@ char lox::Scanner::advance()
     return m_source.at(m_current++);
 }
 
+// peek next character
 char lox::Scanner::peek()
 {
     if (isAtEnd())
@@ -201,6 +207,7 @@ char lox::Scanner::peek()
     return m_source.at(m_current);
 }
 
+// peek character after next character
 char lox::Scanner::peekNext()
 {
     if (m_current + 1 >= m_source.length())
