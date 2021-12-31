@@ -28,8 +28,15 @@ class Token
         const auto token_type = lox::TokenType_Strings.at(t.type);
 
         // iomanip for tabular output
-        stream << std::left << std::setw(15) << token_type;
-        stream << t.lexeme;
+        stream << std::left << std::setw(15) << token_type; // token type
+        stream << std::left << std::setw(15) << t.lexeme;   // lexeme
+
+        // literal
+        if (t.type == TokenType::STRING)
+            stream << std::get<std::string>(t.literal);
+        else if (t.type == TokenType::NUMBER)
+            stream << std::get<double>(t.literal);
+
         return stream;
     }
 };
