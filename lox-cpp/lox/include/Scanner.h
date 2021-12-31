@@ -31,6 +31,7 @@ class Scanner
     void addToken(const TokenType &type, const Token::literal_t &literal = {});
     void string();
     void number();
+    void identifier();
 
     // private helper methods
     bool match(char expected);
@@ -38,6 +39,9 @@ class Scanner
     char advance();
     char peek();
     char peekNext();
+
+    bool isAlpha(char c);
+    bool isAlphaNumeric(char c);
 };
 } // namespace lox
 

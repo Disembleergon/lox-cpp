@@ -57,7 +57,7 @@ static const enum class TokenType
 };
 
 // map contains the enum values in string format (for printing out)
-const static std::unordered_map<TokenType, const char *> TokenType_Strings = {
+static const std::unordered_map<TokenType, const char *> TokenType_Strings = {
     {TokenType::LEFT_PAREN, "LEFT_PAREN"},
     {TokenType::RIGHT_PAREN, "RIGHT_PAREN"},
     {TokenType::LEFT_BRACE, "LEFT_BRACE"},
@@ -98,6 +98,16 @@ const static std::unordered_map<TokenType, const char *> TokenType_Strings = {
     {TokenType::WHILE, "WHILE"},
     {TokenType::Eof, "EOF"}};
 
+static const std::unordered_map<std::string, TokenType> Keywords{
+
+    {"and", TokenType::AND},     {"class", TokenType::CLASS},   {"else", TokenType::ELSE},
+    {"false", TokenType::FALSE}, {"for", TokenType::FOR},       {"fun", TokenType::FUN},
+    {"if", TokenType::IF},       {"nil", TokenType::NIL},       {"or", TokenType::OR},
+    {"print", TokenType::PRINT}, {"return", TokenType::RETURN}, {"super", TokenType::SUPER},
+    {"this", TokenType::THIS},   {"true", TokenType::TRUE},     {"var", TokenType::VAR},
+    {"while", TokenType::WHILE}
+
+};
 } // namespace lox
 
 #endif

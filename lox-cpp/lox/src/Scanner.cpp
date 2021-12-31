@@ -98,6 +98,8 @@ void lox::Scanner::scanToken()
     default:
         if (std::isdigit(c))
             number();
+        else if (isAlpha(c))
+            identifier();
         else
             ErrorHandler::error(m_line, "Unexcpected character");
     }
@@ -153,6 +155,26 @@ void lox::Scanner::number()
     addToken(TokenType::NUMBER, std::stod(str_value));
 }
 
+void lox::Scanner::identifier()
+{
+    while (isAlphaNumeric(peek()))
+        advance();
+
+    const auto lexeme = m_source.substr(m_start, m_current - m_start);
+    TokenType type;
+
+    try
+    {
+        type = Keywords.at(lexeme); // get TokenType from lexeme
+    }
+    catch (std::exception &e)
+    {
+        type = TokenType::IDENTIFIER; // not a keyword, it's an identifier!
+    }
+
+    addToken(type);
+}
+
 bool lox::Scanner::match(char expected)
 {
     if (isAtEnd() || m_source.at(m_current) != expected)
@@ -185,4 +207,14 @@ char lox::Scanner::peekNext()
         return '\0';
 
     return m_source.at(m_current + 1);
+}
+
+bool lox::Scanner::isAlpha(char c)
+{
+    return std::isalpha(c) || c == '_';
+}
+
+bool lox::Scanner::isAlphaNumeric(char c)
+{
+    return isAlpha(c) || std::isdigit(c);
 }
