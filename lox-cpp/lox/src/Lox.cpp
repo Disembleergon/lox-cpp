@@ -1,5 +1,5 @@
 #include "../include/Lox.h"
-#include "../include/Scanner.h"
+#include "../include/scanning/Scanner.h"
 
 #include <fstream>
 #include <string>

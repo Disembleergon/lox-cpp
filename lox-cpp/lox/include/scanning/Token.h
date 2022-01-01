@@ -5,7 +5,7 @@
 #include <iostream>
 #include <variant>
 
-#include "types/TokenType.h"
+#include "../types/TokenType.h"
 
 namespace lox
 {

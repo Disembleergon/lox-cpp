@@ -1,4 +1,4 @@
-#include "../include/Scanner.h"
+#include "../include/scanning/Scanner.h"
 #include "../include/ErrorHandler.h"
 
 lox::Scanner::tokenlist_t lox::Scanner::scanTokens()
