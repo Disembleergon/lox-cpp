@@ -12,13 +12,11 @@ namespace lox
 class Expression
 {
   public:
+    Expression() = default;
+    virtual ~Expression() = default;
+
     using expr_ptr = std::unique_ptr<Expression>;
-
-    virtual Visitor::visitor_t accept(Visitor &) = 0;
-
-    // delete copy constructor & copy assignment operator
-    Expression(const Expression &) = delete;
-    Expression &operator=(const Expression &) = delete;
+    virtual void accept(Visitor &) const = 0;
 };
 
 class Binary final : public Expression
@@ -28,43 +26,60 @@ class Binary final : public Expression
     Token _operator;
     expr_ptr _right;
 
-    Visitor::visitor_t accept(Visitor &visitor) override
+    Binary(expr_ptr &left, const Token &op, expr_ptr &right)
+        : _left{std::move(left)}, _operator{op}, _right{std::move(right)}
     {
-        return visitor.visitBinaryExpr(*this);
+    }
+
+    void accept(Visitor &visitor) const override
+    {
+        visitor.visitBinaryExpr(*this);
     }
 };
 
 class Grouping final : public Expression
 {
   public:
+    Grouping(expr_ptr &expr) : _expression{std::move(expr)}
+    {
+    }
+
     expr_ptr _expression;
 
-    Visitor::visitor_t accept(Visitor &visitor) override
+    void accept(Visitor &visitor) const override
     {
-        return visitor.visitGroupingExpr(*this);
+        visitor.visitGroupingExpr(*this);
     }
 };
 
 class Literal final : public Expression
 {
   public:
+    Literal(const Token::literal_t &val) : _value{val}
+    {
+    }
+
     Token::literal_t _value;
 
-    Visitor::visitor_t accept(Visitor &visitor) override
+    void accept(Visitor &visitor) const override
     {
-        return visitor.visitLiteralExpr(*this);
+        visitor.visitLiteralExpr(*this);
     }
 };
 
 class Unary final : public Expression
 {
   public:
+    Unary(const Token &op, expr_ptr &right) : _operator{op}, _right{std::move(right)}
+    {
+    }
+
     Token _operator;
     expr_ptr _right;
 
-    Visitor::visitor_t accept(Visitor &visitor) override
+    void accept(Visitor &visitor) const override
     {
-        return visitor.visitUnaryExpr(*this);
+        visitor.visitUnaryExpr(*this);
     }
 };
 

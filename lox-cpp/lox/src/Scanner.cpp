@@ -164,7 +164,7 @@ void lox::Scanner::identifier()
     {
         type = Keywords.at(lexeme); // get TokenType from lexeme
     }
-    catch (std::exception &e)
+    catch (std::exception &)
     {
         type = TokenType::IDENTIFIER; // not a keyword, it's an identifier!
     }

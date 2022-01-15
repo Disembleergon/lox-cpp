@@ -12,13 +12,12 @@ class Unary;
 class Visitor
 {
   public:
-    using visitor_t = std::string; // TODO std::variant later? Currently I only need std::string
     virtual ~Visitor() = default;
 
-    virtual visitor_t visitBinaryExpr(const Binary &expr) = 0;
-    virtual visitor_t visitGroupingExpr(const Grouping &expr) = 0;
-    virtual visitor_t visitLiteralExpr(const Literal &expr) = 0;
-    virtual visitor_t visitUnaryExpr(const Unary &expr) = 0;
+    virtual void visitBinaryExpr(const Binary &expr) = 0;
+    virtual void visitGroupingExpr(const Grouping &expr) = 0;
+    virtual void visitLiteralExpr(const Literal &expr) = 0;
+    virtual void visitUnaryExpr(const Unary &expr) = 0;
 };
 
 } // namespace lox
