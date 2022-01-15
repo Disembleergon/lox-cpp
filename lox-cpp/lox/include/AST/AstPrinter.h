@@ -1,7 +1,6 @@
 #ifndef ASTPRINTER_H
 #define ASTPRINTER_H
 
-#include "../ErrorHandler.h"
 #include "Expressions.h"
 #include "Visitor.h"
 
