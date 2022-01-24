@@ -19,11 +19,11 @@ class AstPrinter : public Visitor
 
     std::string toString() const
     {
-        return m_ss.str();
+        return _ss.str();
     }
 
   private:
-    std::stringstream m_ss;
+    std::stringstream _ss;
     void parenthesize(const std::string &name, const std::vector<Expression *> &expressions);
 };
 

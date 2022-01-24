@@ -6,13 +6,13 @@ lox::Scanner::tokenlist_t lox::Scanner::scanTokens()
     while (!isAtEnd())
     {
         // start of new lexime
-        m_start = m_current;
+        _start = _current;
         scanToken();
     }
 
     // end of line
-    m_tokens.emplace_back(Token{TokenType::Eof, "", {}, m_line});
-    return m_tokens;
+    _tokens.emplace_back(Token{TokenType::Eof, "", {}, _line});
+    return _tokens;
 }
 
 // scan next char and identify it
@@ -83,7 +83,7 @@ void lox::Scanner::scanToken()
 
     // next line
     case '\n':
-        ++m_line;
+        ++_line;
         break;
 
     // string literal
@@ -98,16 +98,16 @@ void lox::Scanner::scanToken()
         else if (isAlpha(c))
             identifier();
         else
-            ErrorHandler::error(m_line, "Unexcpected character");
+            ErrorHandler::error(_line, "Unexcpected character");
     }
 }
 
 void lox::Scanner::addToken(const TokenType &type, const Token::literal_t &literal)
 {
-    std::string text = m_source.substr(m_start, m_current - m_start);
-    const lox::Token newToken{type, text, literal, m_line};
+    std::string text = _source.substr(_start, _current - _start);
+    const lox::Token newToken{type, text, literal, _line};
 
-    m_tokens.emplace_back(newToken);
+    _tokens.emplace_back(newToken);
 }
 
 void lox::Scanner::string()
@@ -115,13 +115,13 @@ void lox::Scanner::string()
     while (peek() != '"' && !isAtEnd())
     {
         if (peek() == '\n')
-            ++m_line;
+            ++_line;
         advance();
     }
 
     if (isAtEnd())
     {
-        ErrorHandler::error(m_line, "Unterminated string.");
+        ErrorHandler::error(_line, "Unterminated string.");
         return;
     }
 
@@ -129,7 +129,7 @@ void lox::Scanner::string()
     advance();
 
     // trim surrounding quotes
-    const auto value = m_source.substr(m_start + 1, m_current - m_start - 2);
+    const auto value = _source.substr(_start + 1, _current - _start - 2);
     addToken(TokenType::STRING, value);
 }
 
@@ -148,7 +148,7 @@ void lox::Scanner::number()
             advance();
     }
 
-    const auto str_value = m_source.substr(m_start, m_current - m_start);
+    const auto str_value = _source.substr(_start, _current - _start);
     addToken(TokenType::NUMBER, std::stod(str_value));
 }
 
@@ -157,7 +157,7 @@ void lox::Scanner::identifier()
     while (isAlphaNumeric(peek()))
         advance();
 
-    const auto lexeme = m_source.substr(m_start, m_current - m_start);
+    const auto lexeme = _source.substr(_start, _current - _start);
     TokenType type;
 
     try
@@ -185,12 +185,12 @@ void lox::Scanner::multiline_comment()
     {
         if (isAtEnd())
         {
-            ErrorHandler::error(m_line, "block-comment not closed.");
+            ErrorHandler::error(_line, "block-comment not closed.");
             return;
         }
 
         if (peek() == '\n')
-            ++m_line;
+            ++_line;
         advance();
     }
 
@@ -202,21 +202,21 @@ void lox::Scanner::multiline_comment()
 // check if next char == expected & advance
 bool lox::Scanner::match(char expected)
 {
-    if (isAtEnd() || m_source.at(m_current) != expected)
+    if (isAtEnd() || _source.at(_current) != expected)
         return false;
 
-    ++m_current;
+    ++_current;
     return true;
 }
 
 bool lox::Scanner::isAtEnd() const
 {
-    return m_current >= m_source.length();
+    return _current >= _source.length();
 }
 
 char lox::Scanner::advance()
 {
-    return m_source.at(m_current++);
+    return _source.at(_current++);
 }
 
 // peek next character
@@ -224,16 +224,16 @@ char lox::Scanner::peek()
 {
     if (isAtEnd())
         return '\0';
-    return m_source.at(m_current);
+    return _source.at(_current);
 }
 
 // peek character after next character
 char lox::Scanner::peekNext()
 {
-    if (m_current + 1 >= m_source.length())
+    if (_current + 1 >= _source.length())
         return '\0';
 
-    return m_source.at(m_current + 1);
+    return _source.at(_current + 1);
 }
 
 bool lox::Scanner::isAlpha(char c)
