@@ -19,14 +19,18 @@ class Parser
     const std::vector<Token> _tokens;
     int _current{0};
 
-    Expression::expr_ptr expression(); // evaluates to equality(), just to prevent confusion
+    Expression::expr_ptr expression();
     Expression::expr_ptr equality();
     Expression::expr_ptr comparison();
+    Expression::expr_ptr term();
+    Expression::expr_ptr factor();
+    Expression::expr_ptr unary();
+    Expression::expr_ptr primary();
 
     // ---- helper functions ----
 
     // check if current token has any of the given types
-    bool match(const std::vector<TokenType> &);
+    bool match(const std::vector<TokenType> &&);
 
     // returns true if the current token matches the given type
     bool check(TokenType);
