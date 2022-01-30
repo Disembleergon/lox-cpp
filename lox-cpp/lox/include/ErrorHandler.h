@@ -1,11 +1,18 @@
 #ifndef ERRORHANDLER_H
 #define ERRORHANDLER_H
 
+namespace lox
+{
+class Token;
+
 class ErrorHandler
 {
   public:
-    static void error(int line, const std::string &&message);
+    static void error(int line, const std::string &message);
+    static void error(const Token &token, const std::string &message);
     static void report(int line, const std::string &where, const std::string &message);
 };
+
+} // namespace lox
 
 #endif

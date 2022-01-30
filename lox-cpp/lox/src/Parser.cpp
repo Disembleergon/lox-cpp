@@ -1,4 +1,5 @@
 #include "../include/parsing/Parser.h"
+#include "../include/ErrorHandler.h"
 
 using namespace lox;
 
@@ -97,8 +98,8 @@ Expression::expr_ptr lox::Parser::primary()
     if (match({LEFT_PAREN}))
     {
         Expression::expr_ptr expr = expression();
-        // consume(RIGHT_PAREN, "Expect ')' after expression.");
-        // return std::make_unique<Grouping>(Grouping{expr});
+        consume(RIGHT_PAREN, "Expect ')' after expression.");
+        return std::make_unique<Grouping>(Grouping{expr});
     }
 }
 
@@ -113,6 +114,15 @@ bool Parser::match(const std::vector<TokenType> &&types)
         }
     }
     return false;
+}
+
+Token lox::Parser::consume(TokenType type, const std::string &&message)
+{
+    if (check(type))
+        return advance();
+
+    ErrorHandler::error(peek(), message);
+    throw std::runtime_error{message};
 }
 
 bool Parser::check(TokenType t)

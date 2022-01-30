@@ -32,6 +32,9 @@ class Parser
     // check if current token has any of the given types
     bool match(const std::vector<TokenType> &&);
 
+    // report error if next token isnt the expected one (and advance)
+    Token consume(TokenType type, const std::string &&message);
+
     // returns true if the current token matches the given type
     bool check(TokenType);
 
