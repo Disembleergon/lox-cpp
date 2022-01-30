@@ -27,6 +27,9 @@ class Parser
     Expression::expr_ptr unary();
     Expression::expr_ptr primary();
 
+    // discard tokens until next statement (called when a sysntax error appears)
+    void synchronize();
+
     // ---- helper functions ----
 
     // check if current token has any of the given types

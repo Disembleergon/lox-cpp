@@ -101,6 +101,37 @@ Expression::expr_ptr lox::Parser::primary()
         consume(RIGHT_PAREN, "Expect ')' after expression.");
         return std::make_unique<Grouping>(Grouping{expr});
     }
+
+    const std::string message = "Expect expression.";
+    ErrorHandler::error(peek(), message);
+    throw std::runtime_error(message);
+}
+
+void lox::Parser::synchronize()
+{
+    advance();
+    using enum TokenType;
+
+    while (!isAtEnd())
+    {
+        if (previous().type == SEMICOLON)
+            return;
+
+        switch (peek().type)
+        {
+        case CLASS:
+        case FUN:
+        case VAR:
+        case FOR:
+        case IF:
+        case WHILE:
+        case PRINT:
+        case RETURN:
+            return;
+        }
+
+        advance();
+    }
 }
 
 bool Parser::match(const std::vector<TokenType> &&types)
