@@ -8,7 +8,7 @@
 bool lox::Lox::hadError = false;
 
 // run .lox file
-void lox::Lox::runFile(const char *filename)
+void lox::Lox::runFile(const std::string &&filename)
 {
     // ---- read in file to sourceCode string ----
     std::ifstream fileStream(filename);
@@ -18,7 +18,7 @@ void lox::Lox::runFile(const char *filename)
     {
         std::string line;
         while (std::getline(fileStream, line))
-          sourceCode += (line + '\n');
+            sourceCode += (line + '\n');
 
         fileStream.close();
     }

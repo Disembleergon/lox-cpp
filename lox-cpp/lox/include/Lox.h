@@ -9,7 +9,7 @@ namespace lox
 class Lox
 {
   public:
-    void runFile(const char *filename);
+    void runFile(const std::string &&filename);
     void runPrompt();
     void run(const std::string &sourceCode);
 

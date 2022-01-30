@@ -4,8 +4,8 @@
 class ErrorHandler
 {
   public:
-    static void error(int line, const char *message);
-    static void report(int line, const char *where, const char *message);
+    static void error(int line, const std::string &&message);
+    static void report(int line, const std::string &where, const std::string &message);
 };
 
 #endif
