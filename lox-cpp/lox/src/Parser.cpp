@@ -3,6 +3,20 @@
 
 using namespace lox;
 
+Expression::expr_ptr lox::Parser::parse()
+{
+    try
+    {
+        return expression();
+    }
+    catch (std::runtime_error &)
+    {
+        return nullptr;
+    }
+}
+
+// ------ private part ------
+
 // evaluates to equality(), just to prevent confusion
 Expression::expr_ptr Parser::expression()
 {

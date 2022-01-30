@@ -1,4 +1,6 @@
 #include "../include/Lox.h"
+#include "../include/AST/AstPrinter.h"
+#include "../include/parsing/Parser.h"
 #include "../include/scanning/Scanner.h"
 
 #include <fstream>
@@ -52,8 +54,15 @@ void lox::Lox::run(const std::string &sourceCode)
     Scanner scanner{sourceCode};
     Scanner::tokenlist_t tokens = scanner.scanTokens();
 
-    for (const auto &token : tokens)
-    {
-        std::cout << token << "\n";
-    }
+    Parser parser{tokens};
+    Expression::expr_ptr expr = parser.parse();
+
+    if (hadError)
+        return;
+
+    // print expression
+    AstPrinter printer;
+    expr->accept(printer);
+
+    std::cout << printer.toString() << std::endl;
 }

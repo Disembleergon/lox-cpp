@@ -15,6 +15,8 @@ class Parser
         // EMPTY
     }
 
+    Expression::expr_ptr parse();
+
   private:
     const std::vector<Token> _tokens;
     int _current{0};
