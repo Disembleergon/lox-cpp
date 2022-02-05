@@ -19,7 +19,9 @@ class Interpreter : public Visitor
     literal_t _resultingLiteral;
     literal_t getLiteral(const Expression::expr_ptr &expr);
 
+    void evaluatePlus(const literal_t &left, const literal_t &right);
     bool isTruthy(const literal_t &lit);
+    bool isEqual(const literal_t &a, const literal_t &b);
 };
 } // namespace lox
 
