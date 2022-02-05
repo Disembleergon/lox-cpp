@@ -2,6 +2,7 @@
 #define INTERPRETER_H
 
 #include "../AST/Visitor.h"
+#include "../include/AST/Expressions.h"
 #include "../types/LoxLiterals.h"
 
 namespace lox
@@ -16,7 +17,9 @@ class Interpreter : public Visitor
 
   private:
     literal_t _resultingLiteral;
-    literal_t getLiteral(const Literal &lit);
+    literal_t getLiteral(const Expression::expr_ptr &expr);
+
+    bool isTruthy(const literal_t &lit);
 };
 } // namespace lox
 
