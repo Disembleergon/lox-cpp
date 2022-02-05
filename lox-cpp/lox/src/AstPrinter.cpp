@@ -13,19 +13,20 @@ void lox::AstPrinter::visitGroupingExpr(const Grouping &expr)
 void lox::AstPrinter::visitLiteralExpr(const Literal &expr)
 {
     const literal_t &lit = expr._value;
+    using namespace std;
 
     // handle std::variant
 
-    if (std::holds_alternative<std::string>(lit))
-        _ss << std::get<std::string>(lit);
-    else if (std::holds_alternative<bool>(lit))
-        _ss << (std::get<bool>(lit) ? "true" : "false");
-    else if (std::holds_alternative<double>(lit))
-        _ss << std::get<double>(lit);
-    else if (std::holds_alternative<std::nullptr_t>(lit))
+    if (holds_alternative<string>(lit))
+        _ss << get<string>(lit);
+    else if (holds_alternative<bool>(lit))
+        _ss << (get<bool>(lit) ? "true" : "false");
+    else if (holds_alternative<double>(lit))
+        _ss << get<double>(lit);
+    else if (holds_alternative<nullptr_t>(lit))
         _ss << "nil";
     else
-        std::cout << "[ASTPrinter] Couldn't parse literal\n";
+        cout << "[ASTPrinter] Couldn't parse literal\n";
 }
 
 void lox::AstPrinter::visitUnaryExpr(const Unary &expr)
