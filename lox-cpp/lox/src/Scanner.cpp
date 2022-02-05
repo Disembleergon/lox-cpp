@@ -1,5 +1,6 @@
 #include "../include/scanning/Scanner.h"
 #include "../include/ErrorHandler.h"
+#include "../include/types/LoxLiterals.h"
 
 lox::Scanner::tokenlist_t lox::Scanner::scanTokens()
 {
@@ -102,7 +103,7 @@ void lox::Scanner::scanToken()
     }
 }
 
-void lox::Scanner::addToken(const TokenType &type, const Token::literal_t &literal)
+void lox::Scanner::addToken(const TokenType &type, const literal_t &literal)
 {
     std::string text = _source.substr(_start, _current - _start);
     const lox::Token newToken{type, text, literal, _line};

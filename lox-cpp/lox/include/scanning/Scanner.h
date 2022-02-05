@@ -2,7 +2,6 @@
 #define SCANNER_H
 
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 #include "Token.h"
@@ -28,7 +27,7 @@ class Scanner
 
     // private methods
     void scanToken();
-    void addToken(const TokenType &type, const Token::literal_t &literal = {});
+    void addToken(const TokenType &type, const literal_t &literal = {});
     void string();
     void number();
     void identifier();

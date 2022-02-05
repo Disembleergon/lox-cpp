@@ -1,10 +1,11 @@
 #ifndef EXPRESSIONS_H
 #define EXPRESSIONS_H
 
-#include "../scanning/Token.h"
 #include "Visitor.h"
+#include "../scanning/Token.h"
+#include "../types/LoxLiterals.h"
 
-#include <memory>
+//#include <memory>
 
 namespace lox
 {
@@ -55,11 +56,11 @@ class Grouping final : public Expression
 class Literal final : public Expression
 {
   public:
-    Literal(const Token::literal_t &val) : _value{val}
+    Literal(const literal_t &val) : _value{val}
     {
     }
 
-    Token::literal_t _value;
+    literal_t _value;
 
     void accept(Visitor &visitor) const override
     {

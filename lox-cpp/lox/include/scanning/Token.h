@@ -3,9 +3,9 @@
 
 #include <iomanip>
 #include <iostream>
-#include <variant>
 
 #include "../types/TokenType.h"
+#include "../types/LoxLiterals.h"
 
 namespace lox
 {
@@ -13,9 +13,6 @@ namespace lox
 class Token
 {
   public:
-    // Literals can be strings or numbers (represented as double)
-    using literal_t = std::variant<std::string, double>;
-
     const lox::TokenType type;
     const std::string lexeme;
     const literal_t literal;
