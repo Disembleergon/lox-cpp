@@ -116,7 +116,7 @@ Expression::expr_ptr lox::Parser::primary()
         return std::make_unique<Grouping>(Grouping{expr});
     }
 
-    const std::string message = "Expect expression.";
+    constexpr char message[] = "Expect expression.";
     ErrorHandler::error(peek(), message);
     throw std::runtime_error(message);
 }
