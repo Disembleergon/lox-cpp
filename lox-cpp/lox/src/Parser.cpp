@@ -100,11 +100,11 @@ Expression::expr_ptr lox::Parser::primary()
 {
     using enum TokenType;
     if (match({FALSE}))
-        return std::make_unique<Literal>(Literal{{"false"}});
+        return std::make_unique<Literal>(Literal{{false}});
     if (match({TRUE}))
-        return std::make_unique<Literal>(Literal{{"true"}});
+        return std::make_unique<Literal>(Literal{{true}});
     if (match({NIL}))
-        return std::make_unique<Literal>(Literal{{"nil"}});
+        return std::make_unique<Literal>(Literal{{nullptr}});
 
     if (match({NUMBER, STRING}))
         return std::make_unique<Literal>(Literal{{previous().literal}});
