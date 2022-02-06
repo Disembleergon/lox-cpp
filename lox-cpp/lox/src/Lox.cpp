@@ -6,8 +6,9 @@
 #include <fstream>
 #include <string>
 
-// init hadError variable
+// init hadError variables
 bool lox::Lox::hadError = false;
+bool lox::Lox::hadRuntimeError = false;
 
 // run .lox file
 void lox::Lox::runFile(const std::string &&filename)
@@ -34,7 +35,7 @@ void lox::Lox::runFile(const std::string &&filename)
     run(sourceCode);
 
     // indicate error with exit code
-    if (hadError)
+    if (hadError || hadRuntimeError)
         std::exit(EXIT_FAILURE);
 }
 

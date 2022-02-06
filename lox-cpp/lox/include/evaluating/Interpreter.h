@@ -30,6 +30,9 @@ class LoxRuntimeError : public std::runtime_error
 class Interpreter : public Visitor
 {
   public:
+    void interpret(const Expression::expr_ptr &expr);
+    std::string toString();
+
     void visitBinaryExpr(const Binary &expr) override;
     void visitGroupingExpr(const Grouping &expr) override;
     void visitLiteralExpr(const Literal &expr) override;

@@ -15,6 +15,7 @@ class Lox
 
     // indicates, if any errors were found
     static bool hadError;
+    static bool hadRuntimeError;
 };
 
 } // namespace lox

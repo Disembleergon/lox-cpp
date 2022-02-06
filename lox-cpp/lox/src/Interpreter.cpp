@@ -1,6 +1,42 @@
 #include "../include/evaluating/Interpreter.h"
+#include "../include/ErrorHandler.h"
 #include "../include/types/TokenType.h"
-#include <array>
+
+void lox::Interpreter::interpret(const lox::Expression::expr_ptr &expr)
+{
+    try
+    {
+        expr->accept(*this);
+    }
+    catch (LoxRuntimeError &e)
+    {
+        ErrorHandler::runtimeError(e);
+    }
+}
+
+std::string lox::Interpreter::toString()
+{
+    using namespace std;
+
+    if (holds_alternative<nullptr_t>(_resultingLiteral))
+        return "nil";
+
+    if (holds_alternative<double>(_resultingLiteral))
+    {
+        string strNum = to_string(get<double>(_resultingLiteral));
+
+        // trim away the .0 (if number is integral)
+        if (strNum.ends_with(".0"))
+            strNum = strNum.substr(0, strNum.length() - 2);
+
+        return strNum;
+    }
+
+    if (holds_alternative<string>(_resultingLiteral))
+        return get<string>(_resultingLiteral);
+    if (holds_alternative<bool>(_resultingLiteral))
+        return get<bool>(_resultingLiteral) ? "true" : "false";
+}
 
 void lox::Interpreter::visitBinaryExpr(const Binary &expr)
 {
