@@ -1,10 +1,13 @@
 #include "../include/Lox.h"
 #include "../include/AST/AstPrinter.h"
+#include "../include/evaluating/Interpreter.h"
 #include "../include/parsing/Parser.h"
 #include "../include/scanning/Scanner.h"
 
 #include <fstream>
 #include <string>
+
+lox::Interpreter lox::Lox::_interpreter;
 
 // init hadError variables
 bool lox::Lox::hadError = false;
@@ -61,9 +64,7 @@ void lox::Lox::run(const std::string &sourceCode)
     if (hadError)
         return;
 
-    // print expression
-    AstPrinter printer;
-    expr->accept(printer);
-
-    std::cout << printer.toString() << std::endl;
+    // evaluate expression
+    _interpreter.interpret(expr);
+    std::cout << _interpreter.toString() << std::endl;
 }

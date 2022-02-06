@@ -5,6 +5,7 @@
 
 namespace lox
 {
+class Interpreter;
 
 class Lox
 {
@@ -16,6 +17,9 @@ class Lox
     // indicates, if any errors were found
     static bool hadError;
     static bool hadRuntimeError;
+
+  private:
+    static Interpreter _interpreter;
 };
 
 } // namespace lox

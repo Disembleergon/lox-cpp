@@ -25,9 +25,9 @@ std::string lox::Interpreter::toString()
     {
         string strNum = to_string(get<double>(_resultingLiteral));
 
-        // trim away the .0 (if number is integral)
-        if (strNum.ends_with(".0"))
-            strNum = strNum.substr(0, strNum.length() - 2);
+        // trim away the .000000 (if number is integral)
+        if (strNum.ends_with(".000000"))
+            strNum = strNum.substr(0, strNum.length() - 7);
 
         return strNum;
     }
