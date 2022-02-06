@@ -25,9 +25,15 @@ std::string lox::Interpreter::toString()
     {
         string strNum = to_string(get<double>(_resultingLiteral));
 
-        // trim away the .000000 (if number is integral)
-        if (strNum.ends_with(".000000"))
-            strNum = strNum.substr(0, strNum.length() - 7);
+        // trim away thetrailing zeroes (.0000 etc.)
+        if (strNum.find('.') != string::npos)
+        {
+            strNum = strNum.substr(0, strNum.find_last_not_of('0') + 1);
+
+            // remove '.', if it's the last char
+            if (strNum.find('.') == strNum.length() - 1)
+                strNum = strNum.substr(0, strNum.length() - 1);
+        }
 
         return strNum;
     }
