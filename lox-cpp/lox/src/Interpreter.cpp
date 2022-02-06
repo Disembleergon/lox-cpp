@@ -13,15 +13,19 @@ void lox::Interpreter::visitBinaryExpr(const Binary &expr)
     switch (expr._operator.type)
     {
     case GREATER:
+        checkOperand(expr._operator, left, right);
         _resultingLiteral = get<double>(left) > get<double>(right);
         break;
     case GREATER_EQUAL:
+        checkOperand(expr._operator, left, right);
         _resultingLiteral = get<double>(left) >= get<double>(right);
         break;
     case LESS:
+        checkOperand(expr._operator, left, right);
         _resultingLiteral = get<double>(left) < get<double>(right);
         break;
     case LESS_EQUAL:
+        checkOperand(expr._operator, left, right);
         _resultingLiteral = get<double>(left) <= get<double>(right);
         break;
     case EQUAL_EQUAL:
@@ -31,15 +35,18 @@ void lox::Interpreter::visitBinaryExpr(const Binary &expr)
         _resultingLiteral = !isEqual(left, right);
         break;
     case MINUS:
+        checkOperand(expr._operator, left, right);
         _resultingLiteral = get<double>(left) - get<double>(right);
         break;
     case PLUS:
-        evaluatePlus(left, right);
+        evaluatePlus(left, right, expr._operator);
         break;
     case SLASH:
+        checkOperand(expr._operator, left, right);
         _resultingLiteral = get<double>(left) / get<double>(right);
         break;
     case STAR:
+        checkOperand(expr._operator, left, right);
         _resultingLiteral = get<double>(left) * get<double>(right);
     }
 }
@@ -65,6 +72,7 @@ void lox::Interpreter::visitUnaryExpr(const Unary &expr)
         _resultingLiteral = !isTruthy(right);
         break;
     case MINUS:
+        checkOperand(expr._operator, right);
         _resultingLiteral = -std::get<double>(right);
     }
 
@@ -79,7 +87,7 @@ lox::literal_t lox::Interpreter::getLiteral(const Expression::expr_ptr &expr)
     return std::move(_resultingLiteral);
 }
 
-void lox::Interpreter::evaluatePlus(const literal_t &left, const literal_t &right)
+void lox::Interpreter::evaluatePlus(const literal_t &left, const literal_t &right, const Token &op)
 {
     using namespace std;
 
@@ -94,6 +102,8 @@ void lox::Interpreter::evaluatePlus(const literal_t &left, const literal_t &righ
         _resultingLiteral = get<string>(left) + get<string>(right);
         return;
     }
+
+    throw LoxRuntimeError("Operands must be two numbers or strings.", op);
 }
 
 bool lox::Interpreter::isTruthy(const literal_t &lit)
@@ -124,4 +134,22 @@ bool lox::Interpreter::isEqual(const literal_t &a, const literal_t &b)
         return get<bool>(a) == get<bool>(b);
     if (holds_alternative<string>(a))
         return get<string>(a) == get<string>(b);
+}
+
+// ----- error handling / type checking -----
+
+void lox::Interpreter::checkOperand(const Token &op, const literal_t &operand)
+{
+    if (std::holds_alternative<double>(operand))
+        return;
+
+    throw LoxRuntimeError("Operand must be a number.", op);
+}
+
+void lox::Interpreter::checkOperand(const Token &op, const literal_t &left, const literal_t &right)
+{
+    if (std::holds_alternative<double>(left) && std::holds_alternative<double>(right))
+        return;
+
+    throw LoxRuntimeError("Operands must be numbers.", op);
 }
