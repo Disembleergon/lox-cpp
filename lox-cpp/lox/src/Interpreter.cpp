@@ -85,6 +85,10 @@ void lox::Interpreter::visitBinaryExpr(const Binary &expr)
         break;
     case SLASH:
         checkOperand(expr._operator, left, right);
+
+        if (get<double>(right) == 0)
+            throw LoxRuntimeError("Can't divide by 0.", expr._operator);
+
         _resultingLiteral = get<double>(left) / get<double>(right);
         break;
     case STAR:
