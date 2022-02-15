@@ -9,10 +9,10 @@ class Literal;
 class Unary;
 
 // abstract Visitor class
-class Visitor
+class ExprVisitor
 {
   public:
-    virtual ~Visitor() = default;
+    virtual ~ExprVisitor() = default;
 
     virtual void visitBinaryExpr(const Binary &expr) = 0;
     virtual void visitGroupingExpr(const Grouping &expr) = 0;

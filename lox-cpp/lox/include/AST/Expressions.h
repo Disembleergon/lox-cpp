@@ -17,7 +17,7 @@ class Expression
     virtual ~Expression() = default;
 
     using expr_ptr = std::unique_ptr<Expression>;
-    virtual void accept(Visitor &) const = 0;
+    virtual void accept(ExprVisitor &) const = 0;
 };
 
 class Binary final : public Expression
@@ -32,7 +32,7 @@ class Binary final : public Expression
     {
     }
 
-    void accept(Visitor &visitor) const override
+    void accept(ExprVisitor &visitor) const override
     {
         visitor.visitBinaryExpr(*this);
     }
@@ -47,7 +47,7 @@ class Grouping final : public Expression
 
     expr_ptr _expression;
 
-    void accept(Visitor &visitor) const override
+    void accept(ExprVisitor &visitor) const override
     {
         visitor.visitGroupingExpr(*this);
     }
@@ -62,7 +62,7 @@ class Literal final : public Expression
 
     literal_t _value;
 
-    void accept(Visitor &visitor) const override
+    void accept(ExprVisitor &visitor) const override
     {
         visitor.visitLiteralExpr(*this);
     }
@@ -78,7 +78,7 @@ class Unary final : public Expression
     Token _operator;
     expr_ptr _right;
 
-    void accept(Visitor &visitor) const override
+    void accept(ExprVisitor &visitor) const override
     {
         visitor.visitUnaryExpr(*this);
     }

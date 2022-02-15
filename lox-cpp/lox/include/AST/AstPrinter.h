@@ -9,7 +9,7 @@
 namespace lox
 {
 
-class AstPrinter : public Visitor
+class AstPrinter : public ExprVisitor
 {
   public:
     void visitBinaryExpr(const Binary &expr) override;

@@ -27,7 +27,7 @@ class LoxRuntimeError : public std::runtime_error
     const Token token;
 };
 
-class Interpreter : public Visitor
+class Interpreter : public ExprVisitor
 {
   public:
     void interpret(const Expression::expr_ptr &expr);
