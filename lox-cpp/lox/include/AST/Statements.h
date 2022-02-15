@@ -14,7 +14,7 @@ class Statement
     virtual ~Statement() = default;
 
     using stmt_ptr = std::unique_ptr<Statement>;
-    virtual void accept(ExprVisitor &) const = 0;
+    virtual void accept(StmtVisitor &) const = 0;
 };
 
 class ExpressionStatement final : public Statement
@@ -26,7 +26,7 @@ class ExpressionStatement final : public Statement
 
     Expression::expr_ptr _expr;
 
-    void accept(ExprVisitor &) const override{};
+    void accept(StmtVisitor &) const override{};
 };
 
 class PrintStatement final : public Statement
@@ -38,7 +38,7 @@ class PrintStatement final : public Statement
 
     Expression::expr_ptr _expr;
 
-    void accept(ExprVisitor &) const override{};
+    void accept(StmtVisitor &) const override{};
 };
 
 } // namespace lox
