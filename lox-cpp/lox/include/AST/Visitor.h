@@ -19,10 +19,10 @@ class ExprVisitor
   public:
     virtual ~ExprVisitor() = default;
 
-    virtual void visitBinaryExpr(const Binary &expr) = 0;
-    virtual void visitGroupingExpr(const Grouping &expr) = 0;
-    virtual void visitLiteralExpr(const Literal &expr) = 0;
-    virtual void visitUnaryExpr(const Unary &expr) = 0;
+    virtual void visitBinaryExpr(const Binary &) = 0;
+    virtual void visitGroupingExpr(const Grouping &) = 0;
+    virtual void visitLiteralExpr(const Literal &) = 0;
+    virtual void visitUnaryExpr(const Unary &) = 0;
 };
 
 // abstract
