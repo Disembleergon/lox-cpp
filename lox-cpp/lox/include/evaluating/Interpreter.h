@@ -1,8 +1,9 @@
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
 
+#include "../AST/Expressions.h"
+#include "../AST/Statements.h"
 #include "../AST/Visitor.h"
-#include "../include/AST/Expressions.h"
 #include "../types/LoxLiterals.h"
 
 namespace lox
