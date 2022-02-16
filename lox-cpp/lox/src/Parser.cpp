@@ -3,19 +3,50 @@
 
 using namespace lox;
 
-Expression::expr_ptr lox::Parser::parse()
+std::vector<Statement::stmt_ptr> Parser::parse()
 {
-    try
+    std::vector<Statement::stmt_ptr> stmts; // shorthand for statements
+
+    while (!isAtEnd())
     {
-        return expression();
+        stmts.emplace_back(statement());
     }
-    catch (std::runtime_error &)
-    {
-        return nullptr;
-    }
+
+    return stmts;
 }
 
-// ------ private part ------
+////////////// private part ////////////////
+
+// ----------- parse statements -------------
+
+Statement::stmt_ptr Parser::statement()
+{
+    if (match({TokenType::PRINT}))
+        return printStatement();
+
+    return expressionStatement();
+}
+
+Statement::stmt_ptr Parser::expressionStatement()
+{
+    Expression::expr_ptr expr = expression();
+    consume(TokenType::SEMICOLON, "Expect ';' after value.");
+
+    ExpressionStatement stmt{expr};
+    return std::make_unique<ExpressionStatement>(stmt);
+}
+
+Statement::stmt_ptr Parser::printStatement()
+{
+    // after print comes an expression to print and a semicolon
+    Expression::expr_ptr expr = expression();
+    consume(TokenType::SEMICOLON, "Expect ';' after value.");
+
+    PrintStatement stmt{expr};
+    return std::make_unique<PrintStatement>(stmt);
+}
+
+// ----------- parse expressions --------------
 
 // evaluates to equality(), just to prevent confusion
 Expression::expr_ptr Parser::expression()

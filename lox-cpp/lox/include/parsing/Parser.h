@@ -2,6 +2,7 @@
 #define PARSER_H
 
 #include "../AST/Expressions.h"
+#include "../AST/Statements.h"
 #include <vector>
 
 namespace lox
@@ -15,12 +16,18 @@ class Parser
         // EMPTY
     }
 
-    Expression::expr_ptr parse();
+    std::vector<Statement::stmt_ptr> parse();
 
   private:
     const std::vector<Token> _tokens;
     int _current{0};
 
+    // statement parsing
+    Statement::stmt_ptr statement();
+    Statement::stmt_ptr expressionStatement();
+    Statement::stmt_ptr printStatement();
+
+    // expression parsing
     Expression::expr_ptr expression();
     Expression::expr_ptr equality();
     Expression::expr_ptr comparison();
