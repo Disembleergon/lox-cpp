@@ -27,12 +27,17 @@ class LoxRuntimeError : public std::runtime_error
     const Token token;
 };
 
-class Interpreter : public ExprVisitor
+class Interpreter : public ExprVisitor, public StmtVisitor
 {
   public:
-    void interpret(const Expression::expr_ptr &expr);
+    void interpret(const std::vector<Statement::stmt_ptr> &stmts);
     std::string toString();
 
+    // evaluating statements
+    void visitExpressionStmt(const ExpressionStatement &) override;
+    void visitPrintStmt(const PrintStatement &) override;
+
+    // evaluating expression
     void visitBinaryExpr(const Binary &expr) override;
     void visitGroupingExpr(const Grouping &expr) override;
     void visitLiteralExpr(const Literal &expr) override;

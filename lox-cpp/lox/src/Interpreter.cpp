@@ -1,14 +1,18 @@
 #include "../include/evaluating/Interpreter.h"
+#include "../include/AST/Statements.h"
 #include "../include/ErrorHandler.h"
 #include "../include/types/TokenType.h"
 
-void lox::Interpreter::interpret(const lox::Expression::expr_ptr &expr)
+void lox::Interpreter::interpret(const std::vector<Statement::stmt_ptr> &stmts)
 {
     try
     {
-        expr->accept(*this);
+        for (const Statement::stmt_ptr &statement : stmts)
+        {
+            statement->accept(*this);
+        }
     }
-    catch (LoxRuntimeError &e)
+    catch (const LoxRuntimeError &e)
     {
         ErrorHandler::runtimeError(e);
     }
@@ -43,6 +47,24 @@ std::string lox::Interpreter::toString()
     if (holds_alternative<bool>(_resultingLiteral))
         return get<bool>(_resultingLiteral) ? "true" : "false";
 }
+
+// ----------- evaluate statements ------------
+
+void lox::Interpreter::visitExpressionStmt(const ExpressionStatement &stmt)
+{
+    stmt._expr->accept(*this);
+}
+
+void lox::Interpreter::visitPrintStmt(const PrintStatement &stmt)
+{
+    // get literal in form of a string
+    stmt._expr->accept(*this);
+    const std::string strLiteral = toString();
+
+    std::cout << strLiteral << "\n";
+}
+
+// ----------- evaluate expressions ------------
 
 void lox::Interpreter::visitBinaryExpr(const Binary &expr)
 {
