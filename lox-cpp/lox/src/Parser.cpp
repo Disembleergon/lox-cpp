@@ -32,8 +32,7 @@ Statement::stmt_ptr Parser::expressionStatement()
     Expression::expr_ptr expr = expression();
     consume(TokenType::SEMICOLON, "Expect ';' after value.");
 
-    ExpressionStatement stmt{expr};
-    return std::make_unique<ExpressionStatement>(stmt);
+    return std::make_unique<ExpressionStatement>(ExpressionStatement{expr});
 }
 
 Statement::stmt_ptr Parser::printStatement()
@@ -42,8 +41,7 @@ Statement::stmt_ptr Parser::printStatement()
     Expression::expr_ptr expr = expression();
     consume(TokenType::SEMICOLON, "Expect ';' after value.");
 
-    PrintStatement stmt{expr};
-    return std::make_unique<PrintStatement>(stmt);
+    return std::make_unique<PrintStatement>(PrintStatement{expr});
 }
 
 // ----------- parse expressions --------------
