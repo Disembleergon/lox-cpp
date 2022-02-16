@@ -26,7 +26,10 @@ class ExpressionStatement final : public Statement
 
     Expression::expr_ptr _expr;
 
-    void accept(StmtVisitor &) const override{};
+    void accept(StmtVisitor &visitor) const override
+    {
+        visitor.visitExpressionStmt(*this);
+    };
 };
 
 class PrintStatement final : public Statement
@@ -38,7 +41,10 @@ class PrintStatement final : public Statement
 
     Expression::expr_ptr _expr;
 
-    void accept(StmtVisitor &) const override{};
+    void accept(StmtVisitor &visitor) const override
+    {
+        visitor.visitPrintStmt(*this);
+    };
 };
 
 } // namespace lox
