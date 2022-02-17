@@ -3,7 +3,7 @@
 #include "../include/ErrorHandler.h"
 #include "../include/types/TokenType.h"
 
-void lox::Interpreter::interpret(const std::vector<Statement::stmt_ptr> &stmts)
+void lox::Interpreter::interpret(const Statement::stmt_vec &stmts)
 {
     try
     {

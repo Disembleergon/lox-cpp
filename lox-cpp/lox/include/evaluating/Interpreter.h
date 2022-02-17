@@ -31,7 +31,7 @@ class LoxRuntimeError : public std::runtime_error
 class Interpreter : public ExprVisitor, public StmtVisitor
 {
   public:
-    void interpret(const std::vector<Statement::stmt_ptr> &stmts);
+    void interpret(const Statement::stmt_vec &stmts);
     std::string toString();
 
     // evaluating statements

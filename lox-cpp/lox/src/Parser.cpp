@@ -3,9 +3,9 @@
 
 using namespace lox;
 
-std::vector<Statement::stmt_ptr> Parser::parse()
+Statement::stmt_vec Parser::parse()
 {
-    std::vector<Statement::stmt_ptr> stmts; // shorthand for statements
+    Statement::stmt_vec stmts; // shorthand for statements
 
     while (!isAtEnd())
     {

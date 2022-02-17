@@ -59,7 +59,7 @@ void lox::Lox::run(const std::string &sourceCode)
     Scanner::tokenlist_t tokens = scanner.scanTokens();
 
     Parser parser{tokens};
-    std::vector<Statement::stmt_ptr> statements = parser.parse();
+    Statement::stmt_vec statements = parser.parse();
 
     if (hadError)
         return;

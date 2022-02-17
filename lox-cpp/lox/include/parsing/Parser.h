@@ -16,7 +16,7 @@ class Parser
         // EMPTY
     }
 
-    std::vector<Statement::stmt_ptr> parse();
+    Statement::stmt_vec parse();
 
   private:
     const std::vector<Token> _tokens;
