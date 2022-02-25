@@ -23,6 +23,8 @@ class Parser
     int _current{0};
 
     // statement parsing
+    Statement::stmt_ptr declaration();
+    Statement::stmt_ptr varDeclaration();
     Statement::stmt_ptr statement();
     Statement::stmt_ptr expressionStatement();
     Statement::stmt_ptr printStatement();

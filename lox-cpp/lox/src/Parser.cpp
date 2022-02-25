@@ -9,7 +9,7 @@ Statement::stmt_vec Parser::parse()
 
     while (!isAtEnd())
     {
-        stmts.emplace_back(statement());
+        stmts.emplace_back(declaration()); // every line in the program is a declaration
     }
 
     return stmts;
@@ -18,6 +18,34 @@ Statement::stmt_vec Parser::parse()
 ////////////// private part ////////////////
 
 // ----------- parse statements -------------
+
+Statement::stmt_ptr lox::Parser::declaration()
+{
+    try
+    {
+        if (match({TokenType::VAR}))
+            return varDeclaration();
+
+        return statement();
+    }
+    catch (std::runtime_error &e)
+    {
+        synchronize();
+        return nullptr;
+    }
+}
+
+Statement::stmt_ptr lox::Parser::varDeclaration()
+{
+    Token name = consume(TokenType::IDENTIFIER, "Expect variable name.");
+
+    Expression::expr_ptr initializer; // initializing is optional
+    if (match({TokenType::EQUAL}))
+        initializer = expression();
+
+    consume(TokenType::SEMICOLON, "Expect ';' after variable declaration.");
+    return std::make_unique<VarStatement>(VarStatement{name, initializer});
+}
 
 Statement::stmt_ptr Parser::statement()
 {
@@ -128,6 +156,8 @@ Expression::expr_ptr lox::Parser::unary()
 Expression::expr_ptr lox::Parser::primary()
 {
     using enum TokenType;
+
+    // ---- literals ----
     if (match({FALSE}))
         return std::make_unique<LiteralExpression>(LiteralExpression{{false}});
     if (match({TRUE}))
@@ -138,6 +168,11 @@ Expression::expr_ptr lox::Parser::primary()
     if (match({NUMBER, STRING}))
         return std::make_unique<LiteralExpression>(LiteralExpression{{previous().literal}});
 
+    // variables
+    if (match({IDENTIFIER}))
+        return std::make_unique<VarExpression>(VarExpression(previous()));
+
+    // grouping stuff
     if (match({LEFT_PAREN}))
     {
         Expression::expr_ptr expr = expression();

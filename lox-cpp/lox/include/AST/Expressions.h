@@ -82,6 +82,20 @@ class UnaryExpression final : public Expression
     }
 };
 
+class VarExpression final : public Expression
+{
+  public:
+    VarExpression(const Token &name) : _name{name}
+    {
+    }
+
+    const Token _name;
+
+    void accept(ExprVisitor& visitor) const override {
+        // TODO
+    }
+};
+
 } // namespace lox
 
 #endif

@@ -49,6 +49,23 @@ class PrintStatement final : public Statement
     };
 };
 
+class VarStatement final : public Statement
+{
+  public:
+    VarStatement(const Token &name, Expression::expr_ptr &initializer)
+        : _name{name}, _initializer{std::move(initializer)}
+    {
+    }
+
+    const Token _name;
+    Expression::expr_ptr _initializer;
+
+    void accept(StmtVisitor &visitor) const override
+    {
+        // TODO
+    }
+};
+
 } // namespace lox
 
 #endif
