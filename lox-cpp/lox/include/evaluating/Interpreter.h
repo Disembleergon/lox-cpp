@@ -15,7 +15,7 @@ class LoxRuntimeError : public std::runtime_error
     const char *_msg;
 
   public:
-    LoxRuntimeError(const char *msg, const Token &tok) : std::runtime_error{msg}, _msg{msg}, token{tok}
+    LoxRuntimeError(const std::string &msg, const Token &tok) : std::runtime_error{msg}, _msg{msg.c_str()}, token{tok}
     {
         // EMPTY
     }
