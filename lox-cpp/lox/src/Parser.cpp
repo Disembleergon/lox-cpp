@@ -61,7 +61,7 @@ Expression::expr_ptr Parser::equality()
     {
         Token op = previous();
         Expression::expr_ptr right = comparison();
-        expr = std::make_unique<Binary>(Binary{expr, op, right});
+        expr = std::make_unique<BinaryExpression>(BinaryExpression{expr, op, right});
     }
 
     return expr;
@@ -76,7 +76,7 @@ Expression::expr_ptr Parser::comparison()
     {
         Token op = previous();
         Expression::expr_ptr right = term();
-        expr = std::make_unique<Binary>(Binary{expr, op, right});
+        expr = std::make_unique<BinaryExpression>(BinaryExpression{expr, op, right});
     }
 
     return expr;
@@ -91,7 +91,7 @@ Expression::expr_ptr lox::Parser::term()
     {
         Token op = previous();
         Expression::expr_ptr right = factor();
-        expr = std::make_unique<Binary>(Binary{expr, op, right});
+        expr = std::make_unique<BinaryExpression>(BinaryExpression{expr, op, right});
     }
 
     return expr;
@@ -106,7 +106,7 @@ Expression::expr_ptr lox::Parser::factor()
     {
         Token op = previous();
         Expression::expr_ptr right = unary();
-        expr = std::make_unique<Binary>(Binary{expr, op, right});
+        expr = std::make_unique<BinaryExpression>(BinaryExpression{expr, op, right});
     }
 
     return expr;
@@ -119,7 +119,7 @@ Expression::expr_ptr lox::Parser::unary()
     {
         Token op = previous();
         Expression::expr_ptr right = unary();
-        return std::make_unique<Unary>(Unary{op, right});
+        return std::make_unique<UnaryExpression>(UnaryExpression{op, right});
     }
 
     return primary();
@@ -129,20 +129,20 @@ Expression::expr_ptr lox::Parser::primary()
 {
     using enum TokenType;
     if (match({FALSE}))
-        return std::make_unique<Literal>(Literal{{false}});
+        return std::make_unique<LiteralExpression>(LiteralExpression{{false}});
     if (match({TRUE}))
-        return std::make_unique<Literal>(Literal{{true}});
+        return std::make_unique<LiteralExpression>(LiteralExpression{{true}});
     if (match({NIL}))
-        return std::make_unique<Literal>(Literal{{nullptr}});
+        return std::make_unique<LiteralExpression>(LiteralExpression{{nullptr}});
 
     if (match({NUMBER, STRING}))
-        return std::make_unique<Literal>(Literal{{previous().literal}});
+        return std::make_unique<LiteralExpression>(LiteralExpression{{previous().literal}});
 
     if (match({LEFT_PAREN}))
     {
         Expression::expr_ptr expr = expression();
         consume(RIGHT_PAREN, "Expect ')' after expression.");
-        return std::make_unique<Grouping>(Grouping{expr});
+        return std::make_unique<GroupingExpression>(GroupingExpression{expr});
     }
 
     constexpr char message[] = "Expect expression.";

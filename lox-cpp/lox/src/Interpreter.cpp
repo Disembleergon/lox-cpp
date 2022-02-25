@@ -66,7 +66,7 @@ void lox::Interpreter::visitPrintStmt(const PrintStatement &stmt)
 
 // ----------- evaluate expressions ------------
 
-void lox::Interpreter::visitBinaryExpr(const Binary &expr)
+void lox::Interpreter::visitBinaryExpr(const BinaryExpression &expr)
 {
     literal_t left = getLiteral(expr._left);
     literal_t right = getLiteral(expr._right);
@@ -119,17 +119,17 @@ void lox::Interpreter::visitBinaryExpr(const Binary &expr)
     }
 }
 
-void lox::Interpreter::visitGroupingExpr(const Grouping &expr)
+void lox::Interpreter::visitGroupingExpr(const GroupingExpression &expr)
 {
     expr._expression->accept(*this);
 }
 
-void lox::Interpreter::visitLiteralExpr(const Literal &expr)
+void lox::Interpreter::visitLiteralExpr(const LiteralExpression &expr)
 {
     _resultingLiteral = expr._value;
 }
 
-void lox::Interpreter::visitUnaryExpr(const Unary &expr)
+void lox::Interpreter::visitUnaryExpr(const UnaryExpression &expr)
 {
     literal_t right = getLiteral(expr._right);
     using enum TokenType;

@@ -4,10 +4,10 @@
 namespace lox
 {
 // expressions
-class Binary;
-class Grouping;
-class Literal;
-class Unary;
+class BinaryExpression;
+class GroupingExpression;
+class LiteralExpression;
+class UnaryExpression;
 
 // statements
 class ExpressionStatement;
@@ -19,10 +19,10 @@ class ExprVisitor
   public:
     virtual ~ExprVisitor() = default;
 
-    virtual void visitBinaryExpr(const Binary &) = 0;
-    virtual void visitGroupingExpr(const Grouping &) = 0;
-    virtual void visitLiteralExpr(const Literal &) = 0;
-    virtual void visitUnaryExpr(const Unary &) = 0;
+    virtual void visitBinaryExpr(const BinaryExpression &) = 0;
+    virtual void visitGroupingExpr(const GroupingExpression &) = 0;
+    virtual void visitLiteralExpr(const LiteralExpression &) = 0;
+    virtual void visitUnaryExpr(const UnaryExpression &) = 0;
 };
 
 // abstract

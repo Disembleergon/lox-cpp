@@ -1,11 +1,9 @@
 #ifndef EXPRESSIONS_H
 #define EXPRESSIONS_H
 
-#include "Visitor.h"
 #include "../scanning/Token.h"
 #include "../types/LoxLiterals.h"
-
-//#include <memory>
+#include "Visitor.h"
 
 namespace lox
 {
@@ -20,14 +18,14 @@ class Expression
     virtual void accept(ExprVisitor &) const = 0;
 };
 
-class Binary final : public Expression
+class BinaryExpression final : public Expression
 {
   public:
     expr_ptr _left;
     Token _operator;
     expr_ptr _right;
 
-    Binary(expr_ptr &left, const Token &op, expr_ptr &right)
+    BinaryExpression(expr_ptr &left, const Token &op, expr_ptr &right)
         : _left{std::move(left)}, _operator{op}, _right{std::move(right)}
     {
     }
@@ -38,10 +36,10 @@ class Binary final : public Expression
     }
 };
 
-class Grouping final : public Expression
+class GroupingExpression final : public Expression
 {
   public:
-    Grouping(expr_ptr &expr) : _expression{std::move(expr)}
+    GroupingExpression(expr_ptr &expr) : _expression{std::move(expr)}
     {
     }
 
@@ -53,10 +51,10 @@ class Grouping final : public Expression
     }
 };
 
-class Literal final : public Expression
+class LiteralExpression final : public Expression
 {
   public:
-    Literal(const literal_t &val) : _value{val}
+    LiteralExpression(const literal_t &val) : _value{val}
     {
     }
 
@@ -68,10 +66,10 @@ class Literal final : public Expression
     }
 };
 
-class Unary final : public Expression
+class UnaryExpression final : public Expression
 {
   public:
-    Unary(const Token &op, expr_ptr &right) : _operator{op}, _right{std::move(right)}
+    UnaryExpression(const Token &op, expr_ptr &right) : _operator{op}, _right{std::move(right)}
     {
     }
 

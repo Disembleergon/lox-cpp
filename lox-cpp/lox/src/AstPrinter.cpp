@@ -1,16 +1,16 @@
 #include "../include/AST/AstPrinter.h"
 
-void lox::AstPrinter::visitBinaryExpr(const Binary &expr)
+void lox::AstPrinter::visitBinaryExpr(const BinaryExpression &expr)
 {
     parenthesize(expr._operator.lexeme, {expr._left.get(), expr._right.get()});
 }
 
-void lox::AstPrinter::visitGroupingExpr(const Grouping &expr)
+void lox::AstPrinter::visitGroupingExpr(const GroupingExpression &expr)
 {
     parenthesize("group", {expr._expression.get()});
 }
 
-void lox::AstPrinter::visitLiteralExpr(const Literal &expr)
+void lox::AstPrinter::visitLiteralExpr(const LiteralExpression &expr)
 {
     const literal_t &lit = expr._value;
     using namespace std;
@@ -29,7 +29,7 @@ void lox::AstPrinter::visitLiteralExpr(const Literal &expr)
         cout << "[ASTPrinter] Couldn't parse literal\n";
 }
 
-void lox::AstPrinter::visitUnaryExpr(const Unary &expr)
+void lox::AstPrinter::visitUnaryExpr(const UnaryExpression &expr)
 {
     parenthesize(expr._operator.lexeme, {expr._right.get()});
 }
