@@ -62,7 +62,7 @@ class VarStatement final : public Statement
 
     void accept(StmtVisitor &visitor) const override
     {
-        // TODO
+        visitor.visitVarStmt(*this);
     }
 };
 

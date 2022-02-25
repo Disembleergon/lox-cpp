@@ -5,6 +5,7 @@
 #include "../AST/Statements.h"
 #include "../AST/Visitor.h"
 #include "../types/LoxLiterals.h"
+#include "Environment.h"
 
 namespace lox
 {
@@ -36,6 +37,7 @@ class Interpreter : public ExprVisitor, public StmtVisitor
 
     // evaluating statements
     void visitExpressionStmt(const ExpressionStatement &) override;
+    void visitVarStmt(const VarStatement &) override;
     void visitPrintStmt(const PrintStatement &) override;
 
     // evaluating expression
@@ -43,8 +45,11 @@ class Interpreter : public ExprVisitor, public StmtVisitor
     void visitGroupingExpr(const GroupingExpression &expr) override;
     void visitLiteralExpr(const LiteralExpression &expr) override;
     void visitUnaryExpr(const UnaryExpression &expr) override;
+    void visitVarExpr(const VarExpression &expr) override;
 
   private:
+    Environment _environment; // for saving variables
+
     literal_t _resultingLiteral;
     literal_t getLiteral(const Expression::expr_ptr &expr);
 

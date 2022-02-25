@@ -91,8 +91,9 @@ class VarExpression final : public Expression
 
     const Token _name;
 
-    void accept(ExprVisitor& visitor) const override {
-        // TODO
+    void accept(ExprVisitor &visitor) const override
+    {
+        visitor.visitVarExpr(*this);
     }
 };
 

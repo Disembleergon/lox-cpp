@@ -55,6 +55,16 @@ void lox::Interpreter::visitExpressionStmt(const ExpressionStatement &stmt)
     stmt._expr->accept(*this);
 }
 
+void lox::Interpreter::visitVarStmt(const VarStatement &stmt)
+{
+    literal_t value;
+    if (stmt._initializer)
+        value = getLiteral(stmt._initializer);
+
+    // save variable
+    _environment.define(stmt._name.lexeme, value);
+}
+
 void lox::Interpreter::visitPrintStmt(const PrintStatement &stmt)
 {
     // get literal in form of a string
@@ -145,6 +155,11 @@ void lox::Interpreter::visitUnaryExpr(const UnaryExpression &expr)
     }
 
     _resultingLiteral = nullptr;
+}
+
+void lox::Interpreter::visitVarExpr(const VarExpression &expr)
+{
+    _resultingLiteral = _environment.get(expr._name);
 }
 
 // ---- private area -----
