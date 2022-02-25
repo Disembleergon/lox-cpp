@@ -22,7 +22,7 @@ class BinaryExpression final : public Expression
 {
   public:
     expr_ptr _left;
-    Token _operator;
+    const Token _operator;
     expr_ptr _right;
 
     BinaryExpression(expr_ptr &left, const Token &op, expr_ptr &right)
@@ -58,7 +58,7 @@ class LiteralExpression final : public Expression
     {
     }
 
-    literal_t _value;
+    const literal_t _value;
 
     void accept(ExprVisitor &visitor) const override
     {
@@ -73,7 +73,7 @@ class UnaryExpression final : public Expression
     {
     }
 
-    Token _operator;
+    const Token _operator;
     expr_ptr _right;
 
     void accept(ExprVisitor &visitor) const override
