@@ -14,6 +14,7 @@ class Environment
 {
   public:
     void define(const std::string &name, const literal_t &value);
+    void assign(const Token &name, const literal_t &value);
     literal_t get(const Token &name);
 
   private:

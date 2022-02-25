@@ -76,9 +76,16 @@ void lox::Interpreter::visitPrintStmt(const PrintStatement &stmt)
 
 // ----------- evaluate expressions ------------
 
-void lox::Interpreter::visitAssignExpr(const AssignExpression &expr) {}
+void lox::Interpreter::visitAssignExpr(const AssignExpression &expr)
+{
+    literal_t value = getLiteral(expr._value); // evaluate expression
+    _environment.assign(expr._name, value);
 
-void lox::Interpreter::visitBinaryExpr(const BinaryExpression &expr) {
+    _resultingLiteral = value; // just to be sure
+}
+
+void lox::Interpreter::visitBinaryExpr(const BinaryExpression &expr)
+{
     literal_t left = getLiteral(expr._left);
     literal_t right = getLiteral(expr._right);
 

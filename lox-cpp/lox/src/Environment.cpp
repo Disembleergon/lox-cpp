@@ -10,6 +10,17 @@ void lox::Environment::define(const std::string &name, const literal_t &value)
     _values[name] = value;
 }
 
+void lox::Environment::assign(const Token &name, const literal_t &value)
+{
+    if (_values.contains(name.lexeme))
+    {
+        _values[name.lexeme] = value;
+        return;
+    }
+
+    throw LoxRuntimeError{"Undefined variable '" + name.lexeme + "'.", name};
+}
+
 lox::literal_t lox::Environment::get(const Token &name)
 {
     if (_values.contains(name.lexeme))

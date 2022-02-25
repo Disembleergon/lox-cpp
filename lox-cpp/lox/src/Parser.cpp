@@ -90,10 +90,9 @@ Expression::expr_ptr lox::Parser::assignment()
         Expression::expr_ptr value = assignment();
 
         // if expr holds an AssignExpression (instanceof)
-        AssignExpression *assign = dynamic_cast<AssignExpression *>(expr.get());
-        if (assign)
+        if (VarExpression *var = dynamic_cast<VarExpression *>(expr.get()))
         {
-            return std::make_unique<AssignExpression>(AssignExpression{assign->_name, value});
+            return std::make_unique<AssignExpression>(AssignExpression{var->_name, value});
         }
 
         ErrorHandler::error(equals_op, "Invalid assignment target.");
