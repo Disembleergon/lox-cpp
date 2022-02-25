@@ -18,6 +18,22 @@ class Expression
     virtual void accept(ExprVisitor &) const = 0;
 };
 
+class AssignExpression final : public Expression
+{
+  public:
+    AssignExpression(const Token &name, Expression::expr_ptr &value) : _name{name}, _value{std::move(value)}
+    {
+    }
+
+    const Token _name;
+    Expression::expr_ptr _value;
+
+    void accept(ExprVisitor &visitor) const override
+    {
+        visitor.visitAssignExpr(*this);
+    }
+};
+
 class BinaryExpression final : public Expression
 {
   public:

@@ -74,10 +74,32 @@ Statement::stmt_ptr Parser::printStatement()
 
 // ----------- parse expressions --------------
 
-// evaluates to equality(), just to prevent confusion
+// evaluates to assignment(), just to prevent confusion
 Expression::expr_ptr Parser::expression()
 {
-    return equality();
+    return assignment();
+}
+
+Expression::expr_ptr lox::Parser::assignment()
+{
+    Expression::expr_ptr expr = equality();
+
+    if (match({TokenType::EQUAL}))
+    {
+        Token equals_op = previous();
+        Expression::expr_ptr value = assignment();
+
+        // if expr holds an AssignExpression (instanceof)
+        AssignExpression *assign = dynamic_cast<AssignExpression *>(expr.get());
+        if (assign)
+        {
+            return std::make_unique<AssignExpression>(AssignExpression{assign->_name, value});
+        }
+
+        ErrorHandler::error(equals_op, "Invalid assignment target.");
+    }
+
+    return expr;
 }
 
 Expression::expr_ptr Parser::equality()

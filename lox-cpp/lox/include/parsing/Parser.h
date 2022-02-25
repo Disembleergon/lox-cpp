@@ -31,6 +31,7 @@ class Parser
 
     // expression parsing
     Expression::expr_ptr expression();
+    Expression::expr_ptr assignment();
     Expression::expr_ptr equality();
     Expression::expr_ptr comparison();
     Expression::expr_ptr term();
