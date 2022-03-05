@@ -50,8 +50,9 @@ std::string lox::Interpreter::toString()
 
 // ----------- evaluate statements ------------
 
-void lox::Interpreter::visitBlockStmt(const BlockStatement &)
+void lox::Interpreter::visitBlockStmt(const BlockStatement &stmt)
 {
+    executeBlock(stmt._statements, Environment{_environment});
 }
 
 void lox::Interpreter::visitExpressionStmt(const ExpressionStatement &stmt)
@@ -175,6 +176,27 @@ void lox::Interpreter::visitVarExpr(const VarExpression &expr)
 }
 
 // ---- private area -----
+
+// for block statements
+void lox::Interpreter::executeBlock(const Statement::stmt_vec &stmts, const Environment &environment)
+{
+    Environment outer = this->_environment;
+
+    try
+    {
+        this->_environment = environment; // use newly created environment
+
+        for (const Statement::stmt_ptr &stmt : stmts)
+            stmt->accept(*this); // execute
+    }
+    catch (std::runtime_error &)
+    {
+        this->_environment = outer; // exit block, so going back to old environment
+    }
+
+    // do it again, in case no exception was thrown
+    this->_environment = outer;
+}
 
 lox::literal_t lox::Interpreter::getLiteral(const Expression::expr_ptr &expr)
 {

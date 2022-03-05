@@ -50,7 +50,8 @@ class Interpreter : public ExprVisitor, public StmtVisitor
     void visitVarExpr(const VarExpression &expr) override;
 
   private:
-    Environment _environment; // for saving variables
+    Environment _environment;                                                      // for saving variables
+    void executeBlock(const Statement::stmt_vec &stmts, const Environment &environment); // for block statements
 
     literal_t _resultingLiteral;
     literal_t getLiteral(const Expression::expr_ptr &expr);
