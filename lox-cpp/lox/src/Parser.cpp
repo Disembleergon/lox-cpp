@@ -47,10 +47,28 @@ Statement::stmt_ptr lox::Parser::varDeclaration()
     return std::make_unique<VarStatement>(VarStatement{name, initializer});
 }
 
+Statement::stmt_vec lox::Parser::block()
+{
+    using TokenType::RIGHT_BRACE;
+
+    Statement::stmt_vec stmts;
+    while (!check(RIGHT_BRACE) && !isAtEnd())
+        stmts.emplace_back(declaration());
+
+    consume(RIGHT_BRACE, "Expect '}' after block.");
+    return stmts;
+}
+
 Statement::stmt_ptr Parser::statement()
 {
     if (match({TokenType::PRINT}))
         return printStatement();
+
+    if (match({TokenType::LEFT_BRACE}))
+    {
+        Statement::stmt_vec stmts = block();
+        return std::make_unique<BlockStatement>(stmts);
+    }
 
     return expressionStatement();
 }
