@@ -50,6 +50,10 @@ std::string lox::Interpreter::toString()
 
 // ----------- evaluate statements ------------
 
+void lox::Interpreter::visitBlockStmt(const BlockStatement &)
+{
+}
+
 void lox::Interpreter::visitExpressionStmt(const ExpressionStatement &stmt)
 {
     stmt._expr->accept(*this);

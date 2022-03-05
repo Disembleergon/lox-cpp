@@ -19,6 +19,21 @@ class Statement
     virtual void accept(StmtVisitor &) const = 0;
 };
 
+class BlockStatement final : public Statement
+{
+  public:
+    BlockStatement(stmt_vec &statements) : _statements{std::move(statements)}
+    {
+    }
+
+    const stmt_vec _statements;
+
+    void accept(StmtVisitor &visitor) const override
+    {
+        // TODO
+    }
+};
+
 class ExpressionStatement final : public Statement
 {
   public:
