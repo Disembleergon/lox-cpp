@@ -61,6 +61,9 @@ Statement::stmt_vec lox::Parser::block()
 
 Statement::stmt_ptr Parser::statement()
 {
+    if (match({TokenType::IF}))
+        return ifStatement();
+
     if (match({TokenType::PRINT}))
         return printStatement();
 
@@ -79,6 +82,23 @@ Statement::stmt_ptr Parser::expressionStatement()
     consume(TokenType::SEMICOLON, "Expect ';' after value.");
 
     return std::make_unique<ExpressionStatement>(ExpressionStatement{expr});
+}
+
+Statement::stmt_ptr lox::Parser::ifStatement()
+{
+    using enum TokenType;
+
+    consume(LEFT_PAREN, "Expect '(' after 'if'.");
+    Expression::expr_ptr condition = expression();
+    consume(RIGHT_PAREN, "Expect ')' after if condition.");
+
+    Statement::stmt_ptr thenBranch = statement();
+    Statement::stmt_ptr elseBranch; // nullptr by default
+
+    if (match({ELSE}))
+        elseBranch = statement();
+
+    return std::make_unique<IfStatement>(condition, thenBranch, elseBranch);
 }
 
 Statement::stmt_ptr Parser::printStatement()

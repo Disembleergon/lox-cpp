@@ -28,6 +28,7 @@ class Parser
     Statement::stmt_vec block(); // returns all the statements in the block
     Statement::stmt_ptr statement();
     Statement::stmt_ptr expressionStatement();
+    Statement::stmt_ptr ifStatement();
     Statement::stmt_ptr printStatement();
 
     // expression parsing

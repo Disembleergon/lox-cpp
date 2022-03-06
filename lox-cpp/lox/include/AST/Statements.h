@@ -22,7 +22,7 @@ class Statement
 class IfStatement final : public Statement
 {
   public:
-    IfStatement(Expression::expr_ptr condition, stmt_ptr thenB, stmt_ptr elseB)
+    IfStatement(Expression::expr_ptr &condition, stmt_ptr &thenB, stmt_ptr &elseB)
         : _condition{std::move(condition)}, _thenBranch{std::move(thenB)}, _elseBranch{std::move(elseB)}
     {
     }
