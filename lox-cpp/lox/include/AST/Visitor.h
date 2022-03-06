@@ -12,6 +12,7 @@ class UnaryExpression;
 class VarExpression;
 
 // statements
+class IfStatement;
 class BlockStatement;
 class ExpressionStatement;
 class VarStatement;
@@ -37,6 +38,7 @@ class StmtVisitor
   public:
     virtual ~StmtVisitor() = default;
 
+    virtual void visitIfStmt(const IfStatement &) = 0;
     virtual void visitBlockStmt(const BlockStatement &) = 0;
     virtual void visitExpressionStmt(const ExpressionStatement &) = 0;
     virtual void visitVarStmt(const VarStatement &) = 0;

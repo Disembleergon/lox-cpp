@@ -37,6 +37,7 @@ class Interpreter : public ExprVisitor, public StmtVisitor
     std::string toString(const literal_t &val);
 
     // evaluating statements
+    void visitIfStmt(const IfStatement &) override;
     void visitBlockStmt(const BlockStatement &) override;
     void visitExpressionStmt(const ExpressionStatement &) override;
     void visitVarStmt(const VarStatement &) override;

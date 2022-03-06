@@ -57,6 +57,16 @@ std::string lox::Interpreter::toString(const literal_t &val)
 
 // ----------- evaluate statements ------------
 
+void lox::Interpreter::visitIfStmt(const IfStatement &stmt)
+{
+    literal_t evaluatedCondition = getLiteral(stmt._condition);
+
+    if (isTruthy(evaluatedCondition))
+        stmt._thenBranch->accept(*this); // execute then branch
+    else if (stmt._elseBranch)
+        stmt._elseBranch->accept(*this); // execute else branch
+}
+
 void lox::Interpreter::visitBlockStmt(const BlockStatement &stmt)
 {
     executeBlock(stmt._statements, Environment{_environment});

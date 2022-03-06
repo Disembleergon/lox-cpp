@@ -33,7 +33,7 @@ class IfStatement final : public Statement
 
     void accept(StmtVisitor &visitor) const override
     {
-        // TODO
+        visitor.visitIfStmt(*this);
     }
 };
 
