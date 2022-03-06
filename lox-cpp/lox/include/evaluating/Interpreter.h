@@ -34,6 +34,7 @@ class Interpreter : public ExprVisitor, public StmtVisitor
   public:
     void interpret(const Statement::stmt_vec &stmts);
     std::string toString();
+    std::string toString(const literal_t &val);
 
     // evaluating statements
     void visitBlockStmt(const BlockStatement &) override;
@@ -50,7 +51,7 @@ class Interpreter : public ExprVisitor, public StmtVisitor
     void visitVarExpr(const VarExpression &expr) override;
 
   private:
-    Environment _environment;                                                      // for saving variables
+    Environment _environment;                                                            // for saving variables
     void executeBlock(const Statement::stmt_vec &stmts, const Environment &environment); // for block statements
 
     literal_t _resultingLiteral;

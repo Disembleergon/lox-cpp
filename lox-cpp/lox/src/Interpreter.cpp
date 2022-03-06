@@ -48,6 +48,13 @@ std::string lox::Interpreter::toString()
         return get<bool>(_resultingLiteral) ? "true" : "false";
 }
 
+std::string lox::Interpreter::toString(const literal_t &val)
+{
+    // because toString() converts the _resultingLiteral member
+    _resultingLiteral = val;
+    return toString();
+}
+
 // ----------- evaluate statements ------------
 
 void lox::Interpreter::visitBlockStmt(const BlockStatement &stmt)
@@ -214,9 +221,9 @@ void lox::Interpreter::evaluatePlus(const literal_t &left, const literal_t &righ
         return;
     }
 
-    if (holds_alternative<string>(left) && holds_alternative<string>(right))
+    if (holds_alternative<string>(left) || holds_alternative<string>(right))
     {
-        _resultingLiteral = get<string>(left) + get<string>(right);
+        _resultingLiteral = toString(left) + toString(right);
         return;
     }
 
