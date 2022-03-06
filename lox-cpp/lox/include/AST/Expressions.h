@@ -82,6 +82,24 @@ class LiteralExpression final : public Expression
     }
 };
 
+class LogicalExpression final : public Expression
+{
+  public:
+    LogicalExpression(expr_ptr &left, const Token &op, expr_ptr &right)
+        : _left{std::move(left)}, _operator{op}, _right{std::move(right)}
+    {
+    }
+
+    expr_ptr _left;
+    const Token _operator;
+    expr_ptr _right;
+
+    void accept(ExprVisitor &visitor) const override
+    {
+        // TODO
+    }
+};
+
 class UnaryExpression final : public Expression
 {
   public:
