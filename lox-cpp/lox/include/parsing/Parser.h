@@ -48,27 +48,28 @@ class Parser
 
     // check if current token has any of the given types
     bool match(const std::vector<TokenType> &&);
+    bool match(const TokenType &); // same but only for 1 TokenType
 
     // report error if next token isnt the expected one (and advance)
     Token consume(TokenType type, const std::string &&message);
 
     // returns true if the current token matches the given type
-    bool check(TokenType);
+    bool check(TokenType) const;
 
     // consumes current token and returns it
     Token advance();
 
-    Token peek()
+    inline Token peek() const
     {
         return _tokens.at(_current);
     }
 
-    Token previous()
+    inline Token previous() const
     {
         return _tokens.at(_current - 1);
     }
 
-    bool isAtEnd()
+    inline bool isAtEnd() const
     {
         return peek().type == TokenType::Eof;
     }

@@ -23,7 +23,7 @@ Statement::stmt_ptr lox::Parser::declaration()
 {
     try
     {
-        if (match({TokenType::VAR}))
+        if (match(TokenType::VAR))
             return varDeclaration();
 
         return statement();
@@ -40,11 +40,11 @@ Statement::stmt_ptr lox::Parser::varDeclaration()
     Token name = consume(TokenType::IDENTIFIER, "Expect variable name.");
 
     Expression::expr_ptr initializer; // initializing is optional
-    if (match({TokenType::EQUAL}))
+    if (match(TokenType::EQUAL))
         initializer = expression();
 
     consume(TokenType::SEMICOLON, "Expect ';' after variable declaration.");
-    return std::make_unique<VarStatement>(VarStatement{name, initializer});
+    return std::make_unique<VarStatement>(name, initializer);
 }
 
 Statement::stmt_vec lox::Parser::block()
@@ -61,13 +61,13 @@ Statement::stmt_vec lox::Parser::block()
 
 Statement::stmt_ptr Parser::statement()
 {
-    if (match({TokenType::IF}))
+    if (match(TokenType::IF))
         return ifStatement();
 
-    if (match({TokenType::PRINT}))
+    if (match(TokenType::PRINT))
         return printStatement();
 
-    if (match({TokenType::LEFT_BRACE}))
+    if (match(TokenType::LEFT_BRACE))
     {
         Statement::stmt_vec stmts = block();
         return std::make_unique<BlockStatement>(stmts);
@@ -81,7 +81,7 @@ Statement::stmt_ptr Parser::expressionStatement()
     Expression::expr_ptr expr = expression();
     consume(TokenType::SEMICOLON, "Expect ';' after value.");
 
-    return std::make_unique<ExpressionStatement>(ExpressionStatement{expr});
+    return std::make_unique<ExpressionStatement>(expr);
 }
 
 Statement::stmt_ptr lox::Parser::ifStatement()
@@ -95,7 +95,7 @@ Statement::stmt_ptr lox::Parser::ifStatement()
     Statement::stmt_ptr thenBranch = statement();
     Statement::stmt_ptr elseBranch; // nullptr by default
 
-    if (match({ELSE}))
+    if (match(ELSE))
         elseBranch = statement();
 
     return std::make_unique<IfStatement>(condition, thenBranch, elseBranch);
@@ -107,7 +107,7 @@ Statement::stmt_ptr Parser::printStatement()
     Expression::expr_ptr expr = expression();
     consume(TokenType::SEMICOLON, "Expect ';' after value.");
 
-    return std::make_unique<PrintStatement>(PrintStatement{expr});
+    return std::make_unique<PrintStatement>(expr);
 }
 
 // ----------- parse expressions --------------
@@ -122,7 +122,7 @@ Expression::expr_ptr lox::Parser::assignment()
 {
     Expression::expr_ptr expr = equality();
 
-    if (match({TokenType::EQUAL}))
+    if (match(TokenType::EQUAL))
     {
         Token equals_op = previous();
         Expression::expr_ptr value = assignment();
@@ -130,7 +130,7 @@ Expression::expr_ptr lox::Parser::assignment()
         // if expr holds an AssignExpression (instanceof)
         if (VarExpression *var = dynamic_cast<VarExpression *>(expr.get()))
         {
-            return std::make_unique<AssignExpression>(AssignExpression{var->_name, value});
+            return std::make_unique<AssignExpression>(var->_name, value);
         }
 
         ErrorHandler::error(equals_op, "Invalid assignment target.");
@@ -148,7 +148,7 @@ Expression::expr_ptr Parser::equality()
     {
         Token op = previous();
         Expression::expr_ptr right = comparison();
-        expr = std::make_unique<BinaryExpression>(BinaryExpression{expr, op, right});
+        expr = std::make_unique<BinaryExpression>(expr, op, right);
     }
 
     return expr;
@@ -163,7 +163,7 @@ Expression::expr_ptr Parser::comparison()
     {
         Token op = previous();
         Expression::expr_ptr right = term();
-        expr = std::make_unique<BinaryExpression>(BinaryExpression{expr, op, right});
+        expr = std::make_unique<BinaryExpression>(expr, op, right);
     }
 
     return expr;
@@ -178,7 +178,7 @@ Expression::expr_ptr lox::Parser::term()
     {
         Token op = previous();
         Expression::expr_ptr right = factor();
-        expr = std::make_unique<BinaryExpression>(BinaryExpression{expr, op, right});
+        expr = std::make_unique<BinaryExpression>(expr, op, right);
     }
 
     return expr;
@@ -193,7 +193,7 @@ Expression::expr_ptr lox::Parser::factor()
     {
         Token op = previous();
         Expression::expr_ptr right = unary();
-        expr = std::make_unique<BinaryExpression>(BinaryExpression{expr, op, right});
+        expr = std::make_unique<BinaryExpression>(expr, op, right);
     }
 
     return expr;
@@ -206,7 +206,7 @@ Expression::expr_ptr lox::Parser::unary()
     {
         Token op = previous();
         Expression::expr_ptr right = unary();
-        return std::make_unique<UnaryExpression>(UnaryExpression{op, right});
+        return std::make_unique<UnaryExpression>(op, right);
     }
 
     return primary();
@@ -217,26 +217,26 @@ Expression::expr_ptr lox::Parser::primary()
     using enum TokenType;
 
     // ---- literals ----
-    if (match({FALSE}))
-        return std::make_unique<LiteralExpression>(LiteralExpression{{false}});
-    if (match({TRUE}))
-        return std::make_unique<LiteralExpression>(LiteralExpression{{true}});
-    if (match({NIL}))
-        return std::make_unique<LiteralExpression>(LiteralExpression{{nullptr}});
+    if (match(FALSE))
+        return std::make_unique<LiteralExpression>(literal_t{false});
+    if (match(TRUE))
+        return std::make_unique<LiteralExpression>(literal_t{true});
+    if (match(NIL))
+        return std::make_unique<LiteralExpression>(literal_t{nullptr});
 
     if (match({NUMBER, STRING}))
-        return std::make_unique<LiteralExpression>(LiteralExpression{{previous().literal}});
+        return std::make_unique<LiteralExpression>(literal_t{previous().literal});
 
     // variables
-    if (match({IDENTIFIER}))
-        return std::make_unique<VarExpression>(VarExpression(previous()));
+    if (match(IDENTIFIER))
+        return std::make_unique<VarExpression>(previous());
 
     // grouping stuff
-    if (match({LEFT_PAREN}))
+    if (match(LEFT_PAREN))
     {
         Expression::expr_ptr expr = expression();
         consume(RIGHT_PAREN, "Expect ')' after expression.");
-        return std::make_unique<GroupingExpression>(GroupingExpression{expr});
+        return std::make_unique<GroupingExpression>(expr);
     }
 
     constexpr char message[] = "Expect expression.";
@@ -284,6 +284,17 @@ bool Parser::match(const std::vector<TokenType> &&types)
     return false;
 }
 
+bool lox::Parser::match(const TokenType &type)
+{
+    if (check(type))
+    {
+        advance();
+        return true;
+    }
+
+    return false;
+}
+
 Token lox::Parser::consume(TokenType type, const std::string &&message)
 {
     if (check(type))
@@ -293,7 +304,7 @@ Token lox::Parser::consume(TokenType type, const std::string &&message)
     throw std::runtime_error{message};
 }
 
-bool Parser::check(TokenType t)
+bool Parser::check(TokenType t) const
 {
     if (isAtEnd())
         return false;
