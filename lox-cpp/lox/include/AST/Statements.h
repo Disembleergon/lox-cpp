@@ -112,7 +112,7 @@ class WhileStatement final : public Statement
 
     void accept(StmtVisitor &visitor) const override
     {
-        // TODO
+        visitor.visitWhileStmt(*this);
     }
 };
 

@@ -96,6 +96,14 @@ void lox::Interpreter::visitPrintStmt(const PrintStatement &stmt)
     std::cout << strLiteral << "\n";
 }
 
+void lox::Interpreter::visitWhileStmt(const WhileStatement &stmt)
+{
+    while (isTruthy(getLiteral(stmt._condition)))
+    {
+        stmt._body->accept(*this);
+    }
+}
+
 // ----------- evaluate expressions ------------
 
 void lox::Interpreter::visitAssignExpr(const AssignExpression &expr)

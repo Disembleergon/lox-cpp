@@ -42,6 +42,7 @@ class Interpreter : public ExprVisitor, public StmtVisitor
     void visitExpressionStmt(const ExpressionStatement &) override;
     void visitVarStmt(const VarStatement &) override;
     void visitPrintStmt(const PrintStatement &) override;
+    void visitWhileStmt(const WhileStatement &) override;
 
     // evaluating expression
     void visitAssignExpr(const AssignExpression &expr) override;
