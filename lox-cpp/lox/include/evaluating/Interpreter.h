@@ -32,6 +32,8 @@ class LoxRuntimeError : public std::runtime_error
 class Interpreter : public ExprVisitor, public StmtVisitor
 {
   public:
+    Interpreter();
+
     void interpret(const Statement::stmt_vec &stmts);
     std::string toString();
     std::string toString(const literal_t &val);
@@ -54,8 +56,9 @@ class Interpreter : public ExprVisitor, public StmtVisitor
     void visitVarExpr(const VarExpression &expr) override;
 
   private:
-    Environment _environment;                                                            // for saving variables
-    void executeBlock(const Statement::stmt_vec &stmts, const Environment &environment); // for block statements
+    Environment::environment_ptr _environment; // for saving variables
+    void executeBlock(const Statement::stmt_vec &stmts,
+                      Environment::environment_ptr environment); // for block statements
 
     literal_t _resultingLiteral;
     literal_t getLiteral(const Expression::expr_ptr &expr);

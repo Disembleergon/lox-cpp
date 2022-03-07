@@ -3,6 +3,10 @@
 #include "../include/ErrorHandler.h"
 #include "../include/types/TokenType.h"
 
+lox::Interpreter::Interpreter() : _environment{std::make_shared<Environment>()}
+{
+}
+
 void lox::Interpreter::interpret(const Statement::stmt_vec &stmts)
 {
     try
@@ -69,7 +73,7 @@ void lox::Interpreter::visitIfStmt(const IfStatement &stmt)
 
 void lox::Interpreter::visitBlockStmt(const BlockStatement &stmt)
 {
-    executeBlock(stmt._statements, Environment{_environment});
+    executeBlock(stmt._statements, std::make_shared<Environment>(_environment));
 }
 
 void lox::Interpreter::visitExpressionStmt(const ExpressionStatement &stmt)
@@ -84,7 +88,7 @@ void lox::Interpreter::visitVarStmt(const VarStatement &stmt)
         value = getLiteral(stmt._initializer);
 
     // save variable
-    _environment.define(stmt._name.lexeme, value);
+    _environment->define(stmt._name.lexeme, value);
 }
 
 void lox::Interpreter::visitPrintStmt(const PrintStatement &stmt)
@@ -109,7 +113,7 @@ void lox::Interpreter::visitWhileStmt(const WhileStatement &stmt)
 void lox::Interpreter::visitAssignExpr(const AssignExpression &expr)
 {
     literal_t value = getLiteral(expr._value); // evaluate expression
-    _environment.assign(expr._name, value);
+    _environment->assign(expr._name, value);
 
     _resultingLiteral = value; // just to be sure
 }
@@ -218,15 +222,15 @@ void lox::Interpreter::visitUnaryExpr(const UnaryExpression &expr)
 
 void lox::Interpreter::visitVarExpr(const VarExpression &expr)
 {
-    _resultingLiteral = _environment.get(expr._name);
+    _resultingLiteral = _environment->get(expr._name);
 }
 
 // ---- private area -----
 
 // for block statements
-void lox::Interpreter::executeBlock(const Statement::stmt_vec &stmts, const Environment &environment)
+void lox::Interpreter::executeBlock(const Statement::stmt_vec &stmts, Environment::environment_ptr environment)
 {
-    Environment outer = this->_environment;
+    Environment::environment_ptr outer = this->_environment;
 
     try
     {
