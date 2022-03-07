@@ -99,6 +99,23 @@ class VarStatement final : public Statement
     }
 };
 
+class WhileStatement final : public Statement
+{
+  public:
+    WhileStatement(Expression::expr_ptr &condition, Statement::stmt_ptr &body)
+        : _condition{std::move(condition)}, _body{std::move(body)}
+    {
+    }
+
+    Expression::expr_ptr _condition;
+    Statement::stmt_ptr _body;
+
+    void accept(StmtVisitor &visitor) const override
+    {
+        // TODO
+    }
+};
+
 } // namespace lox
 
 #endif

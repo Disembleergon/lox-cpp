@@ -61,13 +61,18 @@ Statement::stmt_vec lox::Parser::block()
 
 Statement::stmt_ptr Parser::statement()
 {
-    if (match(TokenType::IF))
+    using enum TokenType;
+
+    if (match(IF))
         return ifStatement();
 
-    if (match(TokenType::PRINT))
+    if (match(PRINT))
         return printStatement();
 
-    if (match(TokenType::LEFT_BRACE))
+    if (match(WHILE))
+        return whileStatement();
+
+    if (match(LEFT_BRACE)) // block statement
     {
         Statement::stmt_vec stmts = block();
         return std::make_unique<BlockStatement>(stmts);
@@ -108,6 +113,16 @@ Statement::stmt_ptr Parser::printStatement()
     consume(TokenType::SEMICOLON, "Expect ';' after value.");
 
     return std::make_unique<PrintStatement>(expr);
+}
+
+Statement::stmt_ptr lox::Parser::whileStatement()
+{
+    consume(TokenType::LEFT_PAREN, "Expect '(' after 'while'.");
+    Expression::expr_ptr condition = expression();
+    consume(TokenType::RIGHT_PAREN, "Expect ')' after condition.");
+
+    Statement::stmt_ptr body = statement();
+    return std::make_unique<WhileStatement>(condition, body);
 }
 
 // ----------- parse expressions --------------

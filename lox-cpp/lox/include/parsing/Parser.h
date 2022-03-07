@@ -30,6 +30,7 @@ class Parser
     Statement::stmt_ptr expressionStatement();
     Statement::stmt_ptr ifStatement();
     Statement::stmt_ptr printStatement();
+    Statement::stmt_ptr whileStatement();
 
     // expression parsing
     Expression::expr_ptr expression();
