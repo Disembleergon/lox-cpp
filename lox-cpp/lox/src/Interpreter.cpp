@@ -169,6 +169,27 @@ void lox::Interpreter::visitLiteralExpr(const LiteralExpression &expr)
     _resultingLiteral = expr._value;
 }
 
+void lox::Interpreter::visitLogicalExpr(const LogicalExpression &expr)
+{
+    const literal_t left = getLiteral(expr._left);
+    const bool leftIsTruthy = isTruthy(left);
+
+    if (expr._operator.type == TokenType::OR) // or
+    {
+        if (leftIsTruthy)
+        {
+            _resultingLiteral = left;
+            return;
+        }
+    }
+    else if (!leftIsTruthy) // and
+    {
+        _resultingLiteral = left; // false (or falsyness, could also return nil etc.)
+    }
+
+    _resultingLiteral = getLiteral(expr._right);
+}
+
 void lox::Interpreter::visitUnaryExpr(const UnaryExpression &expr)
 {
     literal_t right = getLiteral(expr._right);

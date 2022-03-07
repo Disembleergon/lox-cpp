@@ -48,6 +48,7 @@ class Interpreter : public ExprVisitor, public StmtVisitor
     void visitBinaryExpr(const BinaryExpression &expr) override;
     void visitGroupingExpr(const GroupingExpression &expr) override;
     void visitLiteralExpr(const LiteralExpression &expr) override;
+    void visitLogicalExpr(const LogicalExpression &expr) override;
     void visitUnaryExpr(const UnaryExpression &expr) override;
     void visitVarExpr(const VarExpression &expr) override;
 

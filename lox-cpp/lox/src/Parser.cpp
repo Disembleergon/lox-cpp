@@ -120,7 +120,7 @@ Expression::expr_ptr Parser::expression()
 
 Expression::expr_ptr lox::Parser::assignment()
 {
-    Expression::expr_ptr expr = equality();
+    Expression::expr_ptr expr = orExpr();
 
     if (match(TokenType::EQUAL))
     {

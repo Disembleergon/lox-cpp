@@ -8,6 +8,7 @@ class AssignExpression;
 class BinaryExpression;
 class GroupingExpression;
 class LiteralExpression;
+class LogicalExpression;
 class UnaryExpression;
 class VarExpression;
 
@@ -28,6 +29,7 @@ class ExprVisitor
     virtual void visitBinaryExpr(const BinaryExpression &) = 0;
     virtual void visitGroupingExpr(const GroupingExpression &) = 0;
     virtual void visitLiteralExpr(const LiteralExpression &) = 0;
+    virtual void visitLogicalExpr(const LogicalExpression &) = 0;
     virtual void visitUnaryExpr(const UnaryExpression &) = 0;
     virtual void visitVarExpr(const VarExpression &) = 0;
 };

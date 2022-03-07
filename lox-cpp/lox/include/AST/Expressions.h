@@ -96,7 +96,7 @@ class LogicalExpression final : public Expression
 
     void accept(ExprVisitor &visitor) const override
     {
-        // TODO
+        visitor.visitLogicalExpr(*this);
     }
 };
 
