@@ -15,3 +15,5 @@ and my mentor [Frank Grimm](https://homefgr.de/) is helping me with this project
 - [ ] Resolving and Binding
 - [ ] Classes
 - [ ] Inheritance
+
+![progressbar](https://progress-bar.dev/56)
