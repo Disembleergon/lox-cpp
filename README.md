@@ -10,7 +10,7 @@ and my mentor [Frank Grimm](https://homefgr.de/) is helping me with this project
 - [x] Parsing
 - [x] Evaluating
 - [x] Statement and State
-- [ ] Control Flow
+- [x] Control Flow
 - [ ] Functions
 - [ ] Resolving and Binding
 - [ ] Classes
