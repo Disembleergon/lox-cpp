@@ -116,6 +116,18 @@ class WhileStatement final : public Statement
     }
 };
 
+// literally an empty class, the accept method is the only important part ^^
+class BreakStatement final : public Statement
+{
+  public:
+    BreakStatement() = default;
+
+    void accept(StmtVisitor &visitor) const override
+    {
+        visitor.visitBreakStmt(*this);
+    }
+};
+
 } // namespace lox
 
 #endif

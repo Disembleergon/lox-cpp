@@ -75,6 +75,12 @@ Statement::stmt_ptr Parser::statement()
     if (match(WHILE))
         return whileStatement();
 
+    if (match(BREAK))
+    {
+        consume(SEMICOLON, "Expect ';' after 'break'.");
+        return std::make_unique<BreakStatement>();
+    }
+
     if (match(LEFT_BRACE)) // block statement
     {
         Statement::stmt_vec stmts = block();

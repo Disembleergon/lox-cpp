@@ -52,6 +52,7 @@ const enum class TokenType
     TRUE,
     VAR,
     WHILE,
+    BREAK,
 
     Eof
 };
@@ -96,16 +97,16 @@ static const std::unordered_map<TokenType, const char *> TokenType_Strings = {
     {TokenType::TRUE, "TRUE"},
     {TokenType::VAR, "VAR"},
     {TokenType::WHILE, "WHILE"},
+    {TokenType::BREAK, "BREAK"},
     {TokenType::Eof, "EOF"}};
 
 static const std::unordered_map<std::string, TokenType> Keywords{
 
-    {"and", TokenType::AND},     {"class", TokenType::CLASS},   {"else", TokenType::ELSE},
-    {"false", TokenType::FALSE}, {"for", TokenType::FOR},       {"fun", TokenType::FUN},
-    {"if", TokenType::IF},       {"nil", TokenType::NIL},       {"or", TokenType::OR},
-    {"print", TokenType::PRINT}, {"return", TokenType::RETURN}, {"super", TokenType::SUPER},
-    {"this", TokenType::THIS},   {"true", TokenType::TRUE},     {"var", TokenType::VAR},
-    {"while", TokenType::WHILE}
+    {"and", TokenType::AND},    {"class", TokenType::CLASS}, {"else", TokenType::ELSE},     {"false", TokenType::FALSE},
+    {"for", TokenType::FOR},    {"fun", TokenType::FUN},     {"if", TokenType::IF},         {"nil", TokenType::NIL},
+    {"or", TokenType::OR},      {"print", TokenType::PRINT}, {"return", TokenType::RETURN}, {"super", TokenType::SUPER},
+    {"this", TokenType::THIS},  {"true", TokenType::TRUE},   {"var", TokenType::VAR},       {"while", TokenType::WHILE},
+    {"break", TokenType::BREAK}
 
 };
 } // namespace lox

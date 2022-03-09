@@ -19,6 +19,7 @@ class ExpressionStatement;
 class VarStatement;
 class PrintStatement;
 class WhileStatement;
+class BreakStatement;
 
 // abstract
 class ExprVisitor
@@ -47,6 +48,7 @@ class StmtVisitor
     virtual void visitVarStmt(const VarStatement &) = 0;
     virtual void visitPrintStmt(const PrintStatement &) = 0;
     virtual void visitWhileStmt(const WhileStatement &) = 0;
+    virtual void visitBreakStmt(const BreakStatement &) = 0;
 };
 
 } // namespace lox

@@ -3,6 +3,15 @@
 #include "../include/ErrorHandler.h"
 #include "../include/types/TokenType.h"
 
+// for throwing in a while loop (break statement) -> gets catched so the while
+// loop breaks
+class Break : public std::exception
+{
+    // EMPTY
+};
+
+// ---------------------------------
+
 lox::Interpreter::Interpreter() : _environment{std::make_shared<Environment>()}
 {
 }
@@ -102,10 +111,22 @@ void lox::Interpreter::visitPrintStmt(const PrintStatement &stmt)
 
 void lox::Interpreter::visitWhileStmt(const WhileStatement &stmt)
 {
-    while (isTruthy(getLiteral(stmt._condition)))
+    try
     {
-        stmt._body->accept(*this);
+        while (isTruthy(getLiteral(stmt._condition)))
+        {
+            stmt._body->accept(*this);
+        }
     }
+    catch (const Break &)
+    {
+        // while statement is now cancelled
+    }
+}
+
+void lox::Interpreter::visitBreakStmt(const BreakStatement &)
+{
+    throw Break{}; // gets catched in a while loop
 }
 
 // ----------- evaluate expressions ------------
