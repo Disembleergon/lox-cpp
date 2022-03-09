@@ -63,6 +63,9 @@ Statement::stmt_ptr Parser::statement()
 {
     using enum TokenType;
 
+    if (match(FOR))
+        return forStatement();
+
     if (match(IF))
         return ifStatement();
 
@@ -87,6 +90,65 @@ Statement::stmt_ptr Parser::expressionStatement()
     consume(TokenType::SEMICOLON, "Expect ';' after value.");
 
     return std::make_unique<ExpressionStatement>(expr);
+}
+
+Statement::stmt_ptr lox::Parser::forStatement()
+{
+    using enum TokenType;
+    consume(LEFT_PAREN, "Expect '(' after 'for'.");
+
+    Statement::stmt_ptr initializer;
+
+    if (match(SEMICOLON)) // skip next semicolon, if it's there (skipping declaration)
+        initializer = nullptr;
+    else if (match(VAR))
+        initializer = varDeclaration();
+    else
+        initializer = expressionStatement();
+
+    Expression::expr_ptr condition;
+    if (!check(SEMICOLON)) // user skips condition
+        condition = expression();
+
+    consume(SEMICOLON, "Expect ';' after loop condition.");
+
+    Expression::expr_ptr increment;
+    if (!check(RIGHT_PAREN)) // user skips increment
+        increment = expression();
+
+    consume(RIGHT_PAREN, "Expect ')' after clauses.");
+    Statement::stmt_ptr body = statement();
+
+    // ---- desugaring ----
+
+    if (increment) // make var increment in while loop
+    {
+        // convert from expression to statement
+        Statement::stmt_ptr incrementStmt = std::make_unique<ExpressionStatement>(increment);
+
+        Statement::stmt_vec stmts;
+        stmts.push_back(std::move(body));
+        stmts.push_back(std::move(incrementStmt)); // increment at the end of all body statements (append to the rest)
+
+        body = std::make_unique<BlockStatement>(stmts);
+    }
+
+    // default condition = true -> endless loop -> for (;;)
+    if (!condition)
+        condition = std::make_unique<LiteralExpression>(true);
+
+    body = std::make_unique<WhileStatement>(condition, body);
+
+    if (initializer)
+    {
+        Statement::stmt_vec stmts;
+        stmts.push_back(std::move(initializer)); // append initializer before the while loop
+        stmts.push_back(std::move(body));
+
+        body = std::make_unique<BlockStatement>(stmts);
+    }
+
+    return body;
 }
 
 Statement::stmt_ptr lox::Parser::ifStatement()
