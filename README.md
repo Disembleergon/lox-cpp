@@ -4,16 +4,12 @@ This is an interpreter for the toy programming language "Lox".<br/>This project 
 <br/>
 and my mentor [Frank Grimm](https://homefgr.de/) is helping me with this project.
 
-# Progress
+# Features
 
 - [x] Scanning
 - [x] Parsing
 - [x] Evaluating
 - [x] Statement and State
 - [x] Control Flow
-- [ ] Functions
-- [ ] Resolving and Binding
-- [ ] Classes
-- [ ] Inheritance
 
 ![progressbar](https://progress-bar.dev/56)
