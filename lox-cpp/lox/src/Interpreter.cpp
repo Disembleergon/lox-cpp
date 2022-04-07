@@ -1,6 +1,7 @@
 #include "../include/evaluating/Interpreter.h"
 #include "../include/AST/Statements.h"
 #include "../include/ErrorHandler.h"
+#include "../include/types/Callables.h"
 #include "../include/types/TokenType.h"
 
 // for throwing in a while loop (break statement) -> gets catched so the while
@@ -12,8 +13,13 @@ class Break : public std::exception
 
 // ---------------------------------
 
-lox::Interpreter::Interpreter() : _environment{std::make_shared<Environment>()}
+lox::Interpreter::Interpreter() : _globals{std::make_shared<Environment>()}
 {
+    // define native functions
+    _globals->define("clock", std::make_shared<ClockFunction>());
+
+    // copy content to environment
+    _environment = std::make_shared<Environment>(*_globals);
 }
 
 void lox::Interpreter::interpret(const Statement::stmt_vec &stmts)
@@ -190,6 +196,31 @@ void lox::Interpreter::visitBinaryExpr(const BinaryExpression &expr)
         checkOperand(expr._operator, left, right);
         _resultingLiteral = get<double>(left) * get<double>(right);
     }
+}
+
+void lox::Interpreter::visitCallExpr(const CallExpression &expr)
+{
+    literal_t callee = getLiteral(expr._callee);
+
+    std::vector<literal_t> arguments;
+    for (const Expression::expr_ptr arg : expr._args)
+    {
+        literal_t evaluated = getLiteral(arg);
+        arguments.push_back(std::move(evaluated));
+    }
+
+    if (!std::holds_alternative<LoxCallable::callable_ptr>(callee))
+        throw LoxRuntimeError("Can only call functions and classes.", expr._paren);
+
+    LoxCallable::callable_ptr function = std::get<LoxCallable::callable_ptr>(callee);
+    if (arguments.size() != function->arity())
+    {
+        const std::string msg = "Expected " + std::to_string(function->arity()) + " arguments but got " +
+                                std::to_string(arguments.size()) + ".";
+        throw LoxRuntimeError(msg, expr._paren);
+    }
+
+    _resultingLiteral = function->call(*this, std::move(arguments));
 }
 
 void lox::Interpreter::visitGroupingExpr(const GroupingExpression &expr)

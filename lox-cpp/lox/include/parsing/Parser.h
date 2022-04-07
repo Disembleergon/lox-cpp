@@ -18,10 +18,7 @@ class Parser
 
     Statement::stmt_vec parse();
 
-  private:
-    const std::vector<Token> _tokens;
-    int _current{0};
-
+  protected:
     // statement parsing
     Statement::stmt_ptr declaration();
     Statement::stmt_ptr varDeclaration();
@@ -43,7 +40,10 @@ class Parser
     Expression::expr_ptr term();
     Expression::expr_ptr factor();
     Expression::expr_ptr unary();
+    Expression::expr_ptr call();
     Expression::expr_ptr primary();
+
+    Expression::expr_ptr finishCall(Expression::expr_ptr);
 
     // discard tokens until next statement (called when a sysntax error appears)
     void synchronize();
@@ -77,6 +77,10 @@ class Parser
     {
         return peek().type == TokenType::Eof;
     }
+
+  private:
+    const std::vector<Token> _tokens;
+    int _current{0};
 };
 } // namespace lox
 

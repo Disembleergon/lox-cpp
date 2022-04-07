@@ -17,15 +17,7 @@ class Scanner
     using tokenlist_t = std::vector<lox::Token>;
     tokenlist_t scanTokens();
 
-  private:
-    std::string _source;
-    tokenlist_t _tokens;
-
-    int _start = 0;
-    int _current = 0;
-    int _line = 1;
-
-    // private methods
+  protected:
     void scanToken();
     void addToken(const TokenType &type, const literal_t &literal = {});
     void string();
@@ -43,6 +35,14 @@ class Scanner
 
     bool isAlpha(char c);
     bool isAlphaNumeric(char c);
+
+  private:
+    std::string _source;
+    tokenlist_t _tokens;
+
+    int _start = 0;
+    int _current = 0;
+    int _line = 1;
 };
 } // namespace lox
 

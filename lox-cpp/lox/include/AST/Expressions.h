@@ -15,6 +15,7 @@ class Expression
     virtual ~Expression() = default;
 
     using expr_ptr = std::shared_ptr<Expression>;
+    using expr_vec = std::vector<expr_ptr>;
     virtual void accept(ExprVisitor &) const = 0;
 };
 
@@ -49,6 +50,24 @@ class BinaryExpression final : public Expression
     void accept(ExprVisitor &visitor) const override
     {
         visitor.visitBinaryExpr(*this);
+    }
+};
+
+class CallExpression final : public Expression
+{
+  public:
+    CallExpression(Expression::expr_ptr &callee, const Token &paren, Expression::expr_vec &args)
+        : _callee{std::move(callee)}, _paren{paren}, _args{std::move(args)}
+    {
+    }
+
+    Expression::expr_ptr _callee;
+    const Token _paren;
+    const Expression::expr_vec _args;
+
+    void accept(ExprVisitor &visitor) const override
+    {
+        visitor.visitCallExpr(*this);
     }
 };
 

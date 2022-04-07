@@ -1,4 +1,3 @@
-#include "lox/include/AST/AstPrinter.h"
 #include "lox/include/Lox.h"
 
 int main(int argc, char *argv[])

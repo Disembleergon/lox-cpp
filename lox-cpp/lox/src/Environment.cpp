@@ -4,7 +4,7 @@
 // for LoxRuntimeError class
 #include "../include/evaluating/Interpreter.h"
 
-lox::Environment::Environment(environment_ptr enclosing) : _enclosing{enclosing}
+lox::Environment::Environment(environment_ptr enclosing) : _enclosing{std::move(enclosing)}
 {
 }
 

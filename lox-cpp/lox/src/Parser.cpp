@@ -320,7 +320,22 @@ Expression::expr_ptr lox::Parser::unary()
         return std::make_shared<UnaryExpression>(op, right);
     }
 
-    return primary();
+    return call();
+}
+
+Expression::expr_ptr lox::Parser::call()
+{
+    Expression::expr_ptr expr = primary();
+
+    for (;;)
+    {
+        if (match(TokenType::LEFT_PAREN))
+            expr = finishCall(expr);
+        else
+            break;
+    }
+
+    return expr;
 }
 
 Expression::expr_ptr lox::Parser::primary()
@@ -353,6 +368,21 @@ Expression::expr_ptr lox::Parser::primary()
     constexpr char message[] = "Expect expression.";
     ErrorHandler::error(peek(), message);
     throw std::runtime_error(message);
+}
+
+Expression::expr_ptr lox::Parser::finishCall(Expression::expr_ptr callee)
+{
+    Expression::expr_vec args;
+    if (!check(TokenType::RIGHT_PAREN))
+    {
+        do
+        {
+            args.push_back(std::move(expression()));
+        } while (match(TokenType::COMMA));
+    }
+
+    const Token paren = consume(TokenType::RIGHT_PAREN, "Expect ')' after arguments.");
+    return std::make_shared<CallExpression>(callee, paren, args);
 }
 
 void lox::Parser::synchronize()

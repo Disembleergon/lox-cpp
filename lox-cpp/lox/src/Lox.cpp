@@ -1,5 +1,4 @@
 #include "../include/Lox.h"
-#include "../include/AST/AstPrinter.h"
 #include "../include/evaluating/Interpreter.h"
 #include "../include/parsing/Parser.h"
 #include "../include/scanning/Scanner.h"

@@ -6,6 +6,7 @@ namespace lox
 // expressions
 class AssignExpression;
 class BinaryExpression;
+class CallExpression;
 class GroupingExpression;
 class LiteralExpression;
 class LogicalExpression;
@@ -29,6 +30,7 @@ class ExprVisitor
 
     virtual void visitAssignExpr(const AssignExpression &) = 0;
     virtual void visitBinaryExpr(const BinaryExpression &) = 0;
+    virtual void visitCallExpr(const CallExpression &) = 0;
     virtual void visitGroupingExpr(const GroupingExpression &) = 0;
     virtual void visitLiteralExpr(const LiteralExpression &) = 0;
     virtual void visitLogicalExpr(const LogicalExpression &) = 0;
