@@ -13,7 +13,7 @@ class Statement
     Statement() = default;
     virtual ~Statement() = default;
 
-    using stmt_ptr = std::unique_ptr<Statement>;
+    using stmt_ptr = std::shared_ptr<Statement>;
     using stmt_vec = std::vector<stmt_ptr>;
 
     virtual void accept(StmtVisitor &) const = 0;

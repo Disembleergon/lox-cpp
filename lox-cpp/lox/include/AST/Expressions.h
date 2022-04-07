@@ -14,7 +14,7 @@ class Expression
     Expression() = default;
     virtual ~Expression() = default;
 
-    using expr_ptr = std::unique_ptr<Expression>;
+    using expr_ptr = std::shared_ptr<Expression>;
     virtual void accept(ExprVisitor &) const = 0;
 };
 

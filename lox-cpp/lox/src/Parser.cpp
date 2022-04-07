@@ -9,7 +9,7 @@ Statement::stmt_vec Parser::parse()
 
     while (!isAtEnd())
     {
-        stmts.emplace_back(declaration()); // every line in the program is a declaration
+        stmts.push_back(declaration()); // every line in the program is a declaration
     }
 
     return stmts;
@@ -44,7 +44,7 @@ Statement::stmt_ptr lox::Parser::varDeclaration()
         initializer = expression();
 
     consume(TokenType::SEMICOLON, "Expect ';' after variable declaration.");
-    return std::make_unique<VarStatement>(name, initializer);
+    return std::make_shared<VarStatement>(name, initializer);
 }
 
 Statement::stmt_vec lox::Parser::block()
@@ -53,7 +53,7 @@ Statement::stmt_vec lox::Parser::block()
 
     Statement::stmt_vec stmts;
     while (!check(RIGHT_BRACE) && !isAtEnd())
-        stmts.emplace_back(declaration());
+        stmts.push_back(declaration());
 
     consume(RIGHT_BRACE, "Expect '}' after block.");
     return stmts;
@@ -78,13 +78,13 @@ Statement::stmt_ptr Parser::statement()
     if (match(BREAK))
     {
         consume(SEMICOLON, "Expect ';' after 'break'.");
-        return std::make_unique<BreakStatement>();
+        return std::make_shared<BreakStatement>();
     }
 
     if (match(LEFT_BRACE)) // block statement
     {
         Statement::stmt_vec stmts = block();
-        return std::make_unique<BlockStatement>(stmts);
+        return std::make_shared<BlockStatement>(stmts);
     }
 
     return expressionStatement();
@@ -95,7 +95,7 @@ Statement::stmt_ptr Parser::expressionStatement()
     Expression::expr_ptr expr = expression();
     consume(TokenType::SEMICOLON, "Expect ';' after value.");
 
-    return std::make_unique<ExpressionStatement>(expr);
+    return std::make_shared<ExpressionStatement>(expr);
 }
 
 Statement::stmt_ptr lox::Parser::forStatement()
@@ -130,20 +130,20 @@ Statement::stmt_ptr lox::Parser::forStatement()
     if (increment) // make var increment in while loop
     {
         // convert from expression to statement
-        Statement::stmt_ptr incrementStmt = std::make_unique<ExpressionStatement>(increment);
+        Statement::stmt_ptr incrementStmt = std::make_shared<ExpressionStatement>(increment);
 
         Statement::stmt_vec stmts;
         stmts.push_back(std::move(body));
         stmts.push_back(std::move(incrementStmt)); // increment at the end of all body statements (append to the rest)
 
-        body = std::make_unique<BlockStatement>(stmts);
+        body = std::make_shared<BlockStatement>(stmts);
     }
 
     // default condition = true -> endless loop -> for (;;)
     if (!condition)
-        condition = std::make_unique<LiteralExpression>(true);
+        condition = std::make_shared<LiteralExpression>(true);
 
-    body = std::make_unique<WhileStatement>(condition, body);
+    body = std::make_shared<WhileStatement>(condition, body);
 
     if (initializer)
     {
@@ -151,7 +151,7 @@ Statement::stmt_ptr lox::Parser::forStatement()
         stmts.push_back(std::move(initializer)); // append initializer before the while loop
         stmts.push_back(std::move(body));
 
-        body = std::make_unique<BlockStatement>(stmts);
+        body = std::make_shared<BlockStatement>(stmts);
     }
 
     return body;
@@ -171,7 +171,7 @@ Statement::stmt_ptr lox::Parser::ifStatement()
     if (match(ELSE))
         elseBranch = statement();
 
-    return std::make_unique<IfStatement>(condition, thenBranch, elseBranch);
+    return std::make_shared<IfStatement>(condition, thenBranch, elseBranch);
 }
 
 Statement::stmt_ptr Parser::printStatement()
@@ -180,7 +180,7 @@ Statement::stmt_ptr Parser::printStatement()
     Expression::expr_ptr expr = expression();
     consume(TokenType::SEMICOLON, "Expect ';' after value.");
 
-    return std::make_unique<PrintStatement>(expr);
+    return std::make_shared<PrintStatement>(expr);
 }
 
 Statement::stmt_ptr lox::Parser::whileStatement()
@@ -190,7 +190,7 @@ Statement::stmt_ptr lox::Parser::whileStatement()
     consume(TokenType::RIGHT_PAREN, "Expect ')' after condition.");
 
     Statement::stmt_ptr body = statement();
-    return std::make_unique<WhileStatement>(condition, body);
+    return std::make_shared<WhileStatement>(condition, body);
 }
 
 // ----------- parse expressions --------------
@@ -213,7 +213,7 @@ Expression::expr_ptr lox::Parser::assignment()
         // if expr holds an AssignExpression (instanceof)
         if (VarExpression *var = dynamic_cast<VarExpression *>(expr.get()))
         {
-            return std::make_unique<AssignExpression>(var->_name, value);
+            return std::make_shared<AssignExpression>(var->_name, value);
         }
 
         ErrorHandler::error(equals_op, "Invalid assignment target.");
@@ -230,7 +230,7 @@ Expression::expr_ptr lox::Parser::orExpr()
     {
         Token op = previous();
         Expression::expr_ptr right = andExpr();
-        return std::make_unique<LogicalExpression>(expr, op, right);
+        return std::make_shared<LogicalExpression>(expr, op, right);
     }
 
     return expr;
@@ -244,7 +244,7 @@ Expression::expr_ptr lox::Parser::andExpr()
     {
         Token op = previous();
         Expression::expr_ptr right = equality();
-        return std::make_unique<LogicalExpression>(expr, op, right);
+        return std::make_shared<LogicalExpression>(expr, op, right);
     }
 
     return expr;
@@ -259,7 +259,7 @@ Expression::expr_ptr Parser::equality()
     {
         Token op = previous();
         Expression::expr_ptr right = comparison();
-        expr = std::make_unique<BinaryExpression>(expr, op, right);
+        expr = std::make_shared<BinaryExpression>(expr, op, right);
     }
 
     return expr;
@@ -274,7 +274,7 @@ Expression::expr_ptr Parser::comparison()
     {
         Token op = previous();
         Expression::expr_ptr right = term();
-        expr = std::make_unique<BinaryExpression>(expr, op, right);
+        expr = std::make_shared<BinaryExpression>(expr, op, right);
     }
 
     return expr;
@@ -289,7 +289,7 @@ Expression::expr_ptr lox::Parser::term()
     {
         Token op = previous();
         Expression::expr_ptr right = factor();
-        expr = std::make_unique<BinaryExpression>(expr, op, right);
+        expr = std::make_shared<BinaryExpression>(expr, op, right);
     }
 
     return expr;
@@ -304,7 +304,7 @@ Expression::expr_ptr lox::Parser::factor()
     {
         Token op = previous();
         Expression::expr_ptr right = unary();
-        expr = std::make_unique<BinaryExpression>(expr, op, right);
+        expr = std::make_shared<BinaryExpression>(expr, op, right);
     }
 
     return expr;
@@ -317,7 +317,7 @@ Expression::expr_ptr lox::Parser::unary()
     {
         Token op = previous();
         Expression::expr_ptr right = unary();
-        return std::make_unique<UnaryExpression>(op, right);
+        return std::make_shared<UnaryExpression>(op, right);
     }
 
     return primary();
@@ -329,25 +329,25 @@ Expression::expr_ptr lox::Parser::primary()
 
     // ---- literals ----
     if (match(FALSE))
-        return std::make_unique<LiteralExpression>(literal_t{false});
+        return std::make_shared<LiteralExpression>(literal_t{false});
     if (match(TRUE))
-        return std::make_unique<LiteralExpression>(literal_t{true});
+        return std::make_shared<LiteralExpression>(literal_t{true});
     if (match(NIL))
-        return std::make_unique<LiteralExpression>(literal_t{nullptr});
+        return std::make_shared<LiteralExpression>(literal_t{nullptr});
 
     if (match({NUMBER, STRING}))
-        return std::make_unique<LiteralExpression>(literal_t{previous().literal});
+        return std::make_shared<LiteralExpression>(literal_t{previous().literal});
 
     // variables
     if (match(IDENTIFIER))
-        return std::make_unique<VarExpression>(previous());
+        return std::make_shared<VarExpression>(previous());
 
     // grouping stuff
     if (match(LEFT_PAREN))
     {
         Expression::expr_ptr expr = expression();
         consume(RIGHT_PAREN, "Expect ')' after expression.");
-        return std::make_unique<GroupingExpression>(expr);
+        return std::make_shared<GroupingExpression>(expr);
     }
 
     constexpr char message[] = "Expect expression.";
