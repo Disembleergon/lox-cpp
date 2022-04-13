@@ -242,7 +242,6 @@ void lox::Interpreter::visitCallExpr(const CallExpression &expr)
 void lox::Interpreter::visitGroupingExpr(const GroupingExpression &expr)
 {
     expr._expression->accept(*this);
-    _resultingLiteral = nullptr;
 }
 
 void lox::Interpreter::visitLiteralExpr(const LiteralExpression &expr)
