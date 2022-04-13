@@ -67,6 +67,24 @@ class ExpressionStatement final : public Statement
     };
 };
 
+class FunctionStatement final : public Statement
+{
+  public:
+    FunctionStatement(const Token &name, std::vector<Token> &params, Statement::stmt_vec &body)
+        : _name{name}, _params{std::move(params)}, _body{std::move(body)}
+    {
+    }
+
+    const Token _name;
+    const std::vector<Token> _params;
+    const Statement::stmt_vec _body;
+
+    void accept(StmtVisitor &visitor) const override
+    {
+        visitor.visitFunctionStatement(*this);
+    };
+};
+
 class PrintStatement final : public Statement
 {
   public:
@@ -80,6 +98,22 @@ class PrintStatement final : public Statement
     {
         visitor.visitPrintStmt(*this);
     };
+};
+
+class ReturnStatement final : public Statement
+{
+  public:
+    ReturnStatement(const Token &keyword, Expression::expr_ptr &val) : _keyword{keyword}, _value{std::move(val)}
+    {
+    }
+
+    const Token _keyword;
+    Expression::expr_ptr _value;
+
+    void accept(StmtVisitor &visitor) const override
+    {
+        visitor.visitReturnStmt(*this);
+    }
 };
 
 class VarStatement final : public Statement

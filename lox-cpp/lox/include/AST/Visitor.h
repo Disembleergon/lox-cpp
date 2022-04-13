@@ -17,8 +17,10 @@ class VarExpression;
 class IfStatement;
 class BlockStatement;
 class ExpressionStatement;
+class FunctionStatement;
 class VarStatement;
 class PrintStatement;
+class ReturnStatement;
 class WhileStatement;
 class BreakStatement;
 
@@ -47,8 +49,10 @@ class StmtVisitor
     virtual void visitIfStmt(const IfStatement &) = 0;
     virtual void visitBlockStmt(const BlockStatement &) = 0;
     virtual void visitExpressionStmt(const ExpressionStatement &) = 0;
+    virtual void visitFunctionStatement(const FunctionStatement &) = 0;
     virtual void visitVarStmt(const VarStatement &) = 0;
     virtual void visitPrintStmt(const PrintStatement &) = 0;
+    virtual void visitReturnStmt(const ReturnStatement &) = 0;
     virtual void visitWhileStmt(const WhileStatement &) = 0;
     virtual void visitBreakStmt(const BreakStatement &) = 0;
 };

@@ -2,8 +2,8 @@
 
 #include "../include/ErrorHandler.h"
 #include "../include/Lox.h"
-#include "../include/evaluating/Interpreter.h" // for LoxRuntimeError class
 #include "../include/scanning/Token.h"
+#include "../include/types/Throwables.h"
 
 void lox::ErrorHandler::error(int line, const std::string &message)
 {

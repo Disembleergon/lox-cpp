@@ -2,14 +2,8 @@
 #include "../include/AST/Statements.h"
 #include "../include/ErrorHandler.h"
 #include "../include/types/Callables.h"
+#include "../include/types/Throwables.h"
 #include "../include/types/TokenType.h"
-
-// for throwing in a while loop (break statement) -> gets catched so the while
-// loop breaks
-class Break : public std::exception
-{
-    // EMPTY
-};
 
 // ---------------------------------
 
@@ -34,6 +28,10 @@ void lox::Interpreter::interpret(const Statement::stmt_vec &stmts)
     catch (const LoxRuntimeError &e)
     {
         ErrorHandler::runtimeError(e);
+    }
+    catch (const Return &e)
+    {
+        ErrorHandler::error(e.keyword(), "Cannot return outside of a function/method.");
     }
 }
 
@@ -96,6 +94,12 @@ void lox::Interpreter::visitExpressionStmt(const ExpressionStatement &stmt)
     stmt._expr->accept(*this);
 }
 
+void lox::Interpreter::visitFunctionStatement(const FunctionStatement &stmt)
+{
+    LoxCallable::callable_ptr function = std::make_shared<LoxFunction>(stmt, _environment);
+    _environment->define(stmt._name.lexeme, function);
+}
+
 void lox::Interpreter::visitVarStmt(const VarStatement &stmt)
 {
     literal_t value;
@@ -113,6 +117,15 @@ void lox::Interpreter::visitPrintStmt(const PrintStatement &stmt)
     const std::string strLiteral = toString();
 
     std::cout << strLiteral << "\n";
+}
+
+void lox::Interpreter::visitReturnStmt(const ReturnStatement &stmt)
+{
+    literal_t val;
+    if (stmt._value)
+        val = getLiteral(stmt._value);
+
+    throw Return{stmt._keyword, val};
 }
 
 void lox::Interpreter::visitWhileStmt(const WhileStatement &stmt)
@@ -195,6 +208,9 @@ void lox::Interpreter::visitBinaryExpr(const BinaryExpression &expr)
     case STAR:
         checkOperand(expr._operator, left, right);
         _resultingLiteral = get<double>(left) * get<double>(right);
+        break;
+    default:
+        _resultingLiteral = nullptr;
     }
 }
 
@@ -226,6 +242,7 @@ void lox::Interpreter::visitCallExpr(const CallExpression &expr)
 void lox::Interpreter::visitGroupingExpr(const GroupingExpression &expr)
 {
     expr._expression->accept(*this);
+    _resultingLiteral = nullptr;
 }
 
 void lox::Interpreter::visitLiteralExpr(const LiteralExpression &expr)
@@ -267,9 +284,10 @@ void lox::Interpreter::visitUnaryExpr(const UnaryExpression &expr)
     case MINUS:
         checkOperand(expr._operator, right);
         _resultingLiteral = -std::get<double>(right);
+        break;
+    default:
+        _resultingLiteral = nullptr;
     }
-
-    _resultingLiteral = nullptr;
 }
 
 void lox::Interpreter::visitVarExpr(const VarExpression &expr)
@@ -294,6 +312,16 @@ void lox::Interpreter::executeBlock(const Statement::stmt_vec &stmts, Environmen
     catch (std::runtime_error &)
     {
         this->_environment = outer; // exit block, so going back to old environment
+    }
+    catch (Return &)
+    {
+        this->_environment = outer;
+        throw;
+    }
+    catch (Break &)
+    {
+        this->_environment = outer;
+        throw;
     }
 
     // do it again, in case no exception was thrown

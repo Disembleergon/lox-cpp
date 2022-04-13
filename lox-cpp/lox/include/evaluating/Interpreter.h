@@ -10,29 +10,14 @@
 namespace lox
 {
 
-class LoxRuntimeError : public std::runtime_error
-{
-  private:
-    const std::string _msg;
-
-  public:
-    LoxRuntimeError(const std::string &msg, const Token &tok) : std::runtime_error{msg}, _msg{msg}, token{tok}
-    {
-        // EMPTY
-    }
-
-    const char *what() const override
-    {
-        return _msg.c_str();
-    }
-
-    const Token token;
-};
-
 class Interpreter : public ExprVisitor, public StmtVisitor
 {
   public:
     Interpreter();
+    Environment::environment_ptr globals() const
+    {
+        return _globals;
+    }
 
     void interpret(const Statement::stmt_vec &stmts);
     std::string toString();
@@ -42,8 +27,10 @@ class Interpreter : public ExprVisitor, public StmtVisitor
     void visitIfStmt(const IfStatement &) override;
     void visitBlockStmt(const BlockStatement &) override;
     void visitExpressionStmt(const ExpressionStatement &) override;
+    void visitFunctionStatement(const FunctionStatement &) override;
     void visitVarStmt(const VarStatement &) override;
     void visitPrintStmt(const PrintStatement &) override;
+    void visitReturnStmt(const ReturnStatement &) override;
     void visitWhileStmt(const WhileStatement &) override;
     void visitBreakStmt(const BreakStatement &) override;
 
@@ -57,10 +44,10 @@ class Interpreter : public ExprVisitor, public StmtVisitor
     void visitUnaryExpr(const UnaryExpression &expr) override;
     void visitVarExpr(const VarExpression &expr) override;
 
-  protected:
     void executeBlock(const Statement::stmt_vec &stmts,
                       Environment::environment_ptr environment); // for block statements
 
+  protected:
     // evaluate expression and return result (literal)
     literal_t getLiteral(const Expression::expr_ptr &expr);
 

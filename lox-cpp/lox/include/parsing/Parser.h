@@ -22,12 +22,14 @@ class Parser
     // statement parsing
     Statement::stmt_ptr declaration();
     Statement::stmt_ptr varDeclaration();
+    Statement::stmt_ptr function();
     Statement::stmt_vec block(); // returns all the statements in the block
     Statement::stmt_ptr statement();
     Statement::stmt_ptr expressionStatement();
     Statement::stmt_ptr forStatement();
     Statement::stmt_ptr ifStatement();
     Statement::stmt_ptr printStatement();
+    Statement::stmt_ptr returnStatement();
     Statement::stmt_ptr whileStatement();
 
     // expression parsing

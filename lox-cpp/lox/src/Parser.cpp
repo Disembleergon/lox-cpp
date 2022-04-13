@@ -23,6 +23,9 @@ Statement::stmt_ptr lox::Parser::declaration()
 {
     try
     {
+        if (match(TokenType::FUN))
+            return function();
+
         if (match(TokenType::VAR))
             return varDeclaration();
 
@@ -45,6 +48,30 @@ Statement::stmt_ptr lox::Parser::varDeclaration()
 
     consume(TokenType::SEMICOLON, "Expect ';' after variable declaration.");
     return std::make_shared<VarStatement>(name, initializer);
+}
+
+Statement::stmt_ptr lox::Parser::function()
+{
+    using enum TokenType;
+    const Token name = consume(IDENTIFIER, "Expect function/method name.");
+
+    consume(LEFT_PAREN, "Expect '(' after function/method name.");
+    std::vector<Token> params;
+
+    if (!check(RIGHT_PAREN))
+    {
+        do
+        {
+            Token p = consume(IDENTIFIER, "Expect parameter name.");
+            params.push_back(std::move(p));
+        } while (match(COMMA));
+    }
+
+    consume(RIGHT_PAREN, "Expect ')' after parameters.");
+    consume(LEFT_BRACE, "Expect '{' before function/method body.");
+
+    Statement::stmt_vec body = block();
+    return std::make_shared<FunctionStatement>(name, params, body);
 }
 
 Statement::stmt_vec lox::Parser::block()
@@ -71,6 +98,9 @@ Statement::stmt_ptr Parser::statement()
 
     if (match(PRINT))
         return printStatement();
+
+    if (match(RETURN))
+        return returnStatement();
 
     if (match(WHILE))
         return whileStatement();
@@ -181,6 +211,18 @@ Statement::stmt_ptr Parser::printStatement()
     consume(TokenType::SEMICOLON, "Expect ';' after value.");
 
     return std::make_shared<PrintStatement>(expr);
+}
+
+Statement::stmt_ptr lox::Parser::returnStatement()
+{
+    const Token keyword = previous();
+
+    Expression::expr_ptr val;
+    if (!check(TokenType::SEMICOLON))
+        val = expression();
+
+    consume(TokenType::SEMICOLON, "Expect ';' after return value.");
+    return std::make_shared<ReturnStatement>(keyword, val);
 }
 
 Statement::stmt_ptr lox::Parser::whileStatement()

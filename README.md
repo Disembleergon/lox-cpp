@@ -6,10 +6,9 @@ and my mentor [Frank Grimm](https://homefgr.de/) is helping me with this project
 
 # Features
 
-- [x] Scanning
-- [x] Parsing
-- [x] Evaluating
-- [x] Statement and State
-- [x] Control Flow
-
-![progressbar](https://progress-bar.dev/56)
+- Scanning
+- Parsing
+- Evaluating
+- Statement and State
+- Control Flow
+- Functions

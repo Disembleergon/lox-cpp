@@ -1,8 +1,6 @@
 #include "../include/evaluating/Environment.h"
 #include "../include/scanning/Token.h"
-
-// for LoxRuntimeError class
-#include "../include/evaluating/Interpreter.h"
+#include "../include/types/Throwables.h"
 
 lox::Environment::Environment(environment_ptr enclosing) : _enclosing{std::move(enclosing)}
 {
