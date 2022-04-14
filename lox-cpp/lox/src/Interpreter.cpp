@@ -11,6 +11,7 @@ lox::Interpreter::Interpreter() : _globals{std::make_shared<Environment>()}
 {
     // define native functions
     _globals->define("clock", std::make_shared<ClockFunction>());
+    _globals->define("input", std::make_shared<InputFunction>());
 
     // copy content to environment
     _environment = std::make_shared<Environment>(*_globals);

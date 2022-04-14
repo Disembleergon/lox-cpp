@@ -2,8 +2,8 @@
 #define CALLABLES_H
 
 #include "../AST/Statements.h"
-#include "LoxLiterals.h"
 #include "../evaluating/Environment.h"
+#include "LoxLiterals.h"
 #include <vector>
 
 namespace lox
@@ -52,6 +52,22 @@ class LoxFunction final : public LoxCallable
 // ------ native functions --------
 
 class ClockFunction final : public LoxCallable
+{
+  public:
+    constexpr int arity() const override
+    {
+        return 0;
+    }
+
+    literal_t call(Interpreter &, const std::vector<literal_t> &) const override;
+
+    std::string toString() const override
+    {
+        return "<native fn>";
+    }
+};
+
+class InputFunction final : public LoxCallable
 {
   public:
     constexpr int arity() const override

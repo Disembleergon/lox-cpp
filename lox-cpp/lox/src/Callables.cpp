@@ -31,3 +31,10 @@ lox::literal_t lox::LoxFunction::call(Interpreter &interpreter, const std::vecto
 
     return nullptr;
 }
+
+lox::literal_t lox::InputFunction::call(Interpreter &, const std::vector<literal_t> &) const
+{
+    std::string input;
+    std::getline(std::cin, input);
+    return input;
+}
