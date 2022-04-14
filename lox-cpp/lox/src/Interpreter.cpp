@@ -12,6 +12,7 @@ lox::Interpreter::Interpreter() : _globals{std::make_shared<Environment>()}
     // define native functions
     _globals->define("clock", std::make_shared<ClockFunction>());
     _globals->define("input", std::make_shared<InputFunction>());
+    _globals->define("number", std::make_shared<NumberFunction>());
 
     // copy content to environment
     _environment = std::make_shared<Environment>(*_globals);
@@ -237,6 +238,7 @@ void lox::Interpreter::visitCallExpr(const CallExpression &expr)
         throw LoxRuntimeError(msg, expr._paren);
     }
 
+    function->setLineToken(expr._paren); // for error reports inside the call() method
     _resultingLiteral = function->call(*this, std::move(arguments));
 }
 

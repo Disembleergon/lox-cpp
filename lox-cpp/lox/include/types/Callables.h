@@ -22,6 +22,14 @@ class LoxCallable
     {
         return "<callable>";
     }
+
+    void setLineToken(const Token &t)
+    {
+        _lineToken = std::make_unique<Token>(t);
+    }
+
+  protected:
+    std::unique_ptr<Token> _lineToken; // optional, can be used for throwing a LoxRuntimeError in call()
 };
 
 class LoxFunction final : public LoxCallable
@@ -73,6 +81,22 @@ class InputFunction final : public LoxCallable
     constexpr int arity() const override
     {
         return 0;
+    }
+
+    literal_t call(Interpreter &, const std::vector<literal_t> &) const override;
+
+    std::string toString() const override
+    {
+        return "<native fn>";
+    }
+};
+
+class NumberFunction final : public LoxCallable
+{
+  public:
+    constexpr int arity() const override
+    {
+        return 1;
     }
 
     literal_t call(Interpreter &, const std::vector<literal_t> &) const override;
