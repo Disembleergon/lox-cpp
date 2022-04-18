@@ -5,7 +5,7 @@
 
 namespace lox
 {
-const enum class TokenType
+enum class TokenType
 {
     // Single-character tokens.
     LEFT_PAREN,

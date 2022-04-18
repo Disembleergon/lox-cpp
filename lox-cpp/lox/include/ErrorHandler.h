@@ -1,6 +1,8 @@
 #ifndef ERRORHANDLER_H
 #define ERRORHANDLER_H
 
+#include <string>
+
 namespace lox
 {
 class Token;

@@ -4,6 +4,7 @@
 #include "../scanning/Token.h"
 #include "../types/LoxLiterals.h"
 #include "Visitor.h"
+#include <vector>
 
 namespace lox
 {

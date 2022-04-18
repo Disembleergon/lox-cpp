@@ -18,7 +18,7 @@ class LoxRuntimeError : public std::runtime_error
         // EMPTY
     }
 
-    const char *what() const override
+    const char *what() const noexcept override
     {
         return _msg.c_str();
     }
