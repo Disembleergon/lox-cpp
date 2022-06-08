@@ -12,7 +12,7 @@ lox::Scanner::tokenlist_t lox::Scanner::scanTokens()
     }
 
     // end of line
-    _tokens.emplace_back(Token{TokenType::Eof, "", {}, _line});
+    _tokens.push_back(Token{TokenType::Eof, "", {}, _line});
     return _tokens;
 }
 
