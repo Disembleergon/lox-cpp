@@ -108,7 +108,7 @@ void lox::Scanner::addToken(const TokenType &type, const literal_t &literal)
     std::string text = _source.substr(_start, _current - _start);
     const lox::Token newToken{type, text, literal, _line};
 
-    _tokens.emplace_back(newToken);
+    _tokens.push_back(newToken);
 }
 
 void lox::Scanner::string()
