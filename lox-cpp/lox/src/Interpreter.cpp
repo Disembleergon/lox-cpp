@@ -268,6 +268,7 @@ void lox::Interpreter::visitLogicalExpr(const LogicalExpression &expr)
     else if (!leftIsTruthy) // and
     {
         _resultingLiteral = left; // false (or falsyness, could also return nil etc.)
+        return;
     }
 
     _resultingLiteral = getLiteral(expr._right);

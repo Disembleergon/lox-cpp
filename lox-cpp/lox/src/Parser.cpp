@@ -268,11 +268,11 @@ Expression::expr_ptr lox::Parser::orExpr()
 {
     Expression::expr_ptr expr = andExpr();
 
-    if (match(TokenType::OR))
+    while (match(TokenType::OR))
     {
         Token op = previous();
         Expression::expr_ptr right = andExpr();
-        return std::make_shared<LogicalExpression>(expr, op, right);
+        expr = std::make_shared<LogicalExpression>(expr, op, right);
     }
 
     return expr;
@@ -282,11 +282,11 @@ Expression::expr_ptr lox::Parser::andExpr()
 {
     Expression::expr_ptr expr = equality();
 
-    if (match(TokenType::AND))
+    while (match(TokenType::AND))
     {
         Token op = previous();
         Expression::expr_ptr right = equality();
-        return std::make_shared<LogicalExpression>(expr, op, right);
+        expr = std::make_shared<LogicalExpression>(expr, op, right);
     }
 
     return expr;
