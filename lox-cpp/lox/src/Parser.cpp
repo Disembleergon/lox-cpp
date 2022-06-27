@@ -140,7 +140,7 @@ Statement::stmt_ptr lox::Parser::forStatement()
     else if (match(VAR))
         initializer = varDeclaration();
     else
-        initializer = expressionStatement();
+        initializer = expressionStatement(); // e.g. AssignExpression
 
     Expression::expr_ptr condition;
     if (!check(SEMICOLON)) // user skips condition
@@ -252,7 +252,7 @@ Expression::expr_ptr lox::Parser::assignment()
         Token equals_op = previous();
         Expression::expr_ptr value = assignment();
 
-        // if expr holds an AssignExpression (instanceof)
+        // if expr holds a VarExpression (instanceof)
         if (VarExpression *var = dynamic_cast<VarExpression *>(expr.get()))
         {
             return std::make_shared<AssignExpression>(var->_name, value);
